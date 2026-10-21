@@ -1,0 +1,12 @@
+{
+  "name": "aod-expo",
+  "private": true,
+  "description": "AOD for Exhibitors: a single static page for pitching and booking expo stall reels",
+  "scripts": {
+    "dev": "node scripts/serve.mjs",
+    "start": "node scripts/serve.mjs"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

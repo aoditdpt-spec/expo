@@ -1,15 +1,16 @@
 # AOD for Exhibitors
 
-A single static page that the AOD team uses at expos to pitch exhibiting brands and book them on the spot. It has four parts:
+A single static page that the AOD team uses at expos to pitch exhibiting brands and book them on the spot. It's kept short on purpose:
 
 - **The pitch:** "Congratulations on your stall 🎉" and the expo reel offer (₹3,500 for 1 reel and a few stall photos, shot on an iPhone 16 Pro Max), with links to sample reels.
-- **Why cover your stall at the expo:** six reasons, then the bigger services (photography, video, same-day reels, anchors, promoters, drone).
-- **The AOD portfolio:** AOD's own coverage of GATE 2026 and the brands that trust AOD.
+- **Brands that trust AOD:** a scrolling strip of logos.
+- **The AOD portfolio:** AOD's own coverage of GATE 2026.
 - **The booking form:** expo, company name, stall number, point of contact (name, designation, number, email), preferred shoot date, a brief for the artists (optional) and the payment screenshot.
+- **A few FAQs** and a last "book now" band.
 
 The page works for every expo, current and upcoming. The expos come from one data file, so adding the next one is a copy-and-paste (see below).
 
-No framework and no build step: plain HTML, CSS and JavaScript. It has the same look as aod.co.in: AOD orange, white and black, with Bricolage Grotesque and Montserrat.
+No framework and no build step: plain HTML, CSS and JavaScript. `npm run dev` only serves the folder; there is nothing to install or build. It has the same look as aod.co.in: AOD orange, white and black, with Bricolage Grotesque and Montserrat.
 
 ## Files
 
@@ -24,13 +25,14 @@ No framework and no build step: plain HTML, CSS and JavaScript. It has the same 
 | `assets/img/`, `assets/media/` | The logo, brand logos, service photos and the GATE 2026 footage (copied from the aod.co.in project) |
 | `google-apps-script/Code.gs` | The script that saves bookings to a Google Sheet |
 | `sheetsguide.md` | **How to connect the Google Sheet**, step by step |
+| `package.json`, `scripts/serve.mjs` | `npm run dev`: serves the folder at http://localhost:3001 |
 
 ## Before using it with real exhibitors
 
 1. **Connect the Google Sheet.** Follow `sheetsguide.md`. Until `submitUrl` is set in `config.js`, the form opens WhatsApp with the booking and tells the exhibitor to attach the payment screenshot there. Nothing is saved.
 2. **Add the payment details.** In `config.js`, under `payment`, fill in `upiId` (and optionally a QR image in `assets/img/` as `qrImage`). Until then the form tells people to ask the AOD team for the QR.
 3. **Check the offer.** `offer` in `config.js` holds the price, what's included and the sample reel links. Make sure both Drive links are shared as "Anyone with the link".
-4. **Confirm the promises.** The page says the reel is "ready to post while the expo is still on", and the FAQ covers short notice, passes, ownership and drones. Change any of these in `index.html` if they aren't how AOD works.
+4. **Confirm the promises.** The page says the reel is "ready to post while the expo is still on", and the FAQ covers short notice, passes, ownership, payment and drones. Change any of these in `index.html` if they aren't how AOD works.
 
 ## Adding an expo
 
@@ -68,14 +70,14 @@ After a booking, **"Book another stall"** clears the form but keeps the expo, wh
 
 ## Trying it on your computer
 
-Open `index.html` in a browser, or serve the folder so it behaves exactly as it will online:
-
 ```bash
 cd E:\Projects\Internship\expo
-python -m http.server 3200
+npm run dev
 ```
 
-Then open http://localhost:3200. Stop it with Ctrl + C.
+Then open http://localhost:3001. Nothing to install: `scripts/serve.mjs` is a tiny server with no dependencies. It runs on port 3001 so it never clashes with the aod.co.in project on 3000. It also prints an "On your phone" address, which opens the page on a phone on the same Wi-Fi. Stop it with Ctrl + C.
+
+(Opening `index.html` straight from the folder also works, but the server is closer to how it runs online.)
 
 ## Putting the page online
 
@@ -91,7 +93,7 @@ After changing `config.js` or `data/expos.js`, deploy again for the change to go
 
 Put real AOD work only. Add photos to `assets/img/portfolio/` and short videos to `assets/media/`, then list them in `data/portfolio.js`. The file has examples. They show as a grid under the GATE 2026 film.
 
-The service photos in `assets/img/services/` are the mock category photos from the aod.co.in project. They illustrate the services and aren't presented as AOD's portfolio. Swap in real AOD photos when you have them.
+(`assets/img/services/` still holds mock category photos from the aod.co.in project. The page no longer uses them; don't show them as AOD's work.)
 
 ## How a booking is sent
 
