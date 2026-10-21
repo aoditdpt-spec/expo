@@ -1,0 +1,643 @@
+<!doctype html>
+<html lang="en-IN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>AOD for Exhibitors · A reel for your expo stall</title>
+    <meta
+      name="description"
+      content="Congratulations on your stall! AOD shoots a professional reel of your stall on an iPhone 16 Pro Max to drive footfall, boost your social media and document the milestone. Book in a minute."
+    />
+    <meta name="theme-color" content="#ff6201" />
+    <link rel="icon" href="favicon.ico" sizes="any" />
+    <link rel="icon" type="image/png" href="assets/icons/icon-512.png" />
+    <link rel="apple-touch-icon" href="assets/icons/apple-icon.png" />
+
+    <!-- Shared links (mostly on WhatsApp) show this card. -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="AOD · Artists on Demand" />
+    <meta property="og:title" content="Congratulations on your stall! Let's get it a reel 🎬" />
+    <meta
+      property="og:description"
+      content="A professional reel of your expo stall, shot on an iPhone 16 Pro Max, plus a few stall photos. Book in a minute."
+    />
+    <meta property="og:image" content="assets/img/og.jpg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Montserrat:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="preload" as="image" href="assets/media/hero.avif" type="image/avif" media="(min-aspect-ratio: 2/3)" />
+    <link rel="preload" as="image" href="assets/media/hero-portrait.avif" type="image/avif" media="(max-aspect-ratio: 2/3)" />
+    <link rel="stylesheet" href="assets/css/styles.css" />
+
+    <script src="config.js" defer></script>
+    <script src="data/expos.js" defer></script>
+    <script src="data/portfolio.js" defer></script>
+    <script src="assets/js/app.js" defer></script>
+  </head>
+
+  <body>
+    <!-- Icons (Lucide shapes), used with <svg><use href="#i-name"/></svg>. -->
+    <svg width="0" height="0" style="position: absolute" aria-hidden="true">
+      <defs>
+        <symbol id="i-check" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5" /></symbol>
+        <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14" /><path d="m12 5 7 7-7 7" /></symbol>
+        <symbol id="i-camera" viewBox="0 0 24 24"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z" /><circle cx="12" cy="13" r="3" /></symbol>
+        <symbol id="i-video" viewBox="0 0 24 24"><path d="m16 13 5.2 3.5a.5.5 0 0 0 .8-.4V7.9a.5.5 0 0 0-.8-.4L16 10.5" /><rect x="2" y="6" width="14" height="12" rx="2" /></symbol>
+        <symbol id="i-film" viewBox="0 0 24 24"><rect width="18" height="18" x="3" y="3" rx="2" /><path d="M7 3v18M17 3v18M3 7.5h4M3 12h18M3 16.5h4M17 7.5h4M17 16.5h4" /></symbol>
+        <symbol id="i-mic" viewBox="0 0 24 24"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z" /><path d="M19 10v2a7 7 0 0 1-14 0v-2" /><path d="M12 19v3" /></symbol>
+        <symbol id="i-users" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" /><circle cx="9" cy="7" r="4" /><path d="M22 21v-2a4 4 0 0 0-3-3.9M16 3.1a4 4 0 0 1 0 7.8" /></symbol>
+        <symbol id="i-drone" viewBox="0 0 24 24"><circle cx="5" cy="5" r="3" /><circle cx="19" cy="5" r="3" /><circle cx="5" cy="19" r="3" /><circle cx="19" cy="19" r="3" /><rect x="9" y="9" width="6" height="6" rx="1" /><path d="m7 7 2 2M17 7l-2 2M7 17l2-2M17 17l-2-2" /></symbol>
+        <symbol id="i-zap" viewBox="0 0 24 24"><path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z" /></symbol>
+        <symbol id="i-badge" viewBox="0 0 24 24"><path d="M3.85 8.62a4 4 0 0 1 4.78-4.77 4 4 0 0 1 6.74 0 4 4 0 0 1 4.78 4.78 4 4 0 0 1 0 6.74 4 4 0 0 1-4.77 4.78 4 4 0 0 1-6.75 0 4 4 0 0 1-4.78-4.77 4 4 0 0 1 0-6.76Z" /><path d="m9 12 2 2 4-4" /></symbol>
+        <symbol id="i-tag" viewBox="0 0 24 24"><path d="M12.6 2.6A2 2 0 0 0 11.2 2H4a2 2 0 0 0-2 2v7.2a2 2 0 0 0 .6 1.4l8.7 8.7a2.4 2.4 0 0 0 3.4 0l6.6-6.6a2.4 2.4 0 0 0 0-3.4z" /><circle cx="7.5" cy="7.5" r=".5" /></symbol>
+        <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" /><path d="M12 6v6l4 2" /></symbol>
+        <symbol id="i-pin" viewBox="0 0 24 24"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" /><circle cx="12" cy="10" r="3" /></symbol>
+        <symbol id="i-calendar" viewBox="0 0 24 24"><rect width="18" height="18" x="3" y="4" rx="2" /><path d="M16 2v4M8 2v4M3 10h18" /></symbol>
+        <symbol id="i-trend" viewBox="0 0 24 24"><path d="m22 7-8.5 8.5-5-5L2 17" /><path d="M16 7h6v6" /></symbol>
+        <symbol id="i-download" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /><path d="m7 10 5 5 5-5" /><path d="M12 15V3" /></symbol>
+        <symbol id="i-image" viewBox="0 0 24 24"><rect width="18" height="18" x="3" y="3" rx="2" /><circle cx="9" cy="9" r="2" /><path d="m21 15-3.1-3.1a2 2 0 0 0-2.8 0L6 21" /></symbol>
+        <symbol id="i-phone" viewBox="0 0 24 24"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 1.9.7 2.8a2 2 0 0 1-.5 2.1L8.1 9.9a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.8.7a2 2 0 0 1 1.7 2z" /></symbol>
+        <symbol id="i-mail" viewBox="0 0 24 24"><rect width="20" height="16" x="2" y="4" rx="2" /><path d="m22 7-9 5.7a2 2 0 0 1-2 0L2 7" /></symbol>
+        <symbol id="i-store" viewBox="0 0 24 24"><path d="M2 7l2-4h16l2 4" /><path d="M2 7v2a3 3 0 0 0 5 2 3 3 0 0 0 5 0 3 3 0 0 0 5 0 3 3 0 0 0 5-2V7" /><path d="M4 12v9h16v-9" /><path d="M10 21v-5h4v5" /></symbol>
+        <symbol id="i-eye-off" viewBox="0 0 24 24"><path d="M9.9 4.2A10 10 0 0 1 12 4c7 0 10 8 10 8a13 13 0 0 1-1.7 2.7M6.6 6.6A13 13 0 0 0 2 12s3 8 10 8a9.7 9.7 0 0 0 5.4-1.6" /><path d="m2 2 20 20" /></symbol>
+        <symbol id="i-hourglass" viewBox="0 0 24 24"><path d="M5 22h14M5 2h14" /><path d="M17 22v-4.2a2 2 0 0 0-.6-1.4L12 12l-4.4 4.4a2 2 0 0 0-.6 1.4V22M7 2v4.2a2 2 0 0 0 .6 1.4L12 12l4.4-4.4a2 2 0 0 0 .6-1.4V2" /></symbol>
+        <symbol id="i-chevron" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6" /></symbol>
+        <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14" /></symbol>
+        <symbol id="i-whatsapp" viewBox="0 0 24 24">
+          <path
+            fill="currentColor"
+            stroke="none"
+            d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2Zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.2-.4.2-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.7 11.8 11.8 0 0 0 4.5 4c1.7.7 2.3.8 3.2.6.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.2-1.2-.1-.1-.3-.2-.5-.3Z"
+          />
+        </symbol>
+      </defs>
+    </svg>
+
+    <a class="skip" href="#book">Skip to the booking form</a>
+
+    <!-- ───────────── Top bar ───────────── -->
+    <header class="topbar">
+      <div class="wrap topbar__row">
+        <a class="brand" href="#top" aria-label="AOD for Exhibitors, back to top">
+          <img src="assets/img/aod-wordmark.png" alt="AOD" width="85" height="24" />
+          <span class="brand__tag">for Exhibitors</span>
+        </a>
+        <nav class="topbar__nav" aria-label="Sections">
+          <a href="#why">Why cover it</a>
+          <a href="#services">What we do</a>
+          <a href="#portfolio">Portfolio</a>
+          <a href="#how">How it works</a>
+          <a href="#faq">FAQ</a>
+        </nav>
+        <div class="topbar__actions">
+          <a class="icon-btn icon-btn--wa" data-wa href="#" target="_blank" rel="noopener" aria-label="Chat with AOD on WhatsApp">
+            <svg><use href="#i-whatsapp" /></svg>
+          </a>
+          <a class="btn btn--primary btn--sm" href="#book">Book my stall reel</a>
+        </div>
+      </div>
+    </header>
+
+    <main id="top">
+      <!-- ───────────── Hero: the pitch ───────────── -->
+      <section class="hero" aria-labelledby="hero-title">
+        <div class="hero__media" aria-hidden="true">
+          <picture>
+            <source media="(max-aspect-ratio: 2/3)" type="image/avif" srcset="assets/media/hero-portrait.avif" />
+            <source media="(max-aspect-ratio: 2/3)" srcset="assets/media/hero-portrait.webp" />
+            <source type="image/avif" srcset="assets/media/hero.avif" />
+            <img src="assets/media/hero.webp" alt="" fetchpriority="high" />
+          </picture>
+          <!-- The video is added by app.js once the page has loaded (not on Data Saver or reduced motion). -->
+        </div>
+        <div class="hero__veil" aria-hidden="true"></div>
+
+        <div class="wrap hero__grid">
+          <div class="hero__copy">
+            <p class="live-chip" data-live hidden>
+              <span class="live-chip__dot" aria-hidden="true"></span>
+              <span data-live-text></span>
+            </p>
+            <p class="hero__congrats" data-congrats>Congratulations on your stall at the expo 🎉</p>
+            <h1 id="hero-title">One quick reel.<br /><span class="accent">More footfall all show long.</span></h1>
+            <p class="hero__lead">
+              We're Artists on Demand, and we're at the expo. A professional reel creator shoots your stall on an iPhone 16 Pro
+              Max: a reel that pulls visitors in over the next few days, boosts your social media and marks this milestone for
+              your brand.
+            </p>
+            <div class="hero__ctas">
+              <a class="btn btn--primary btn--lg" href="#book">Book my stall reel <svg><use href="#i-arrow" /></svg></a>
+              <a class="btn btn--ghost btn--lg" href="#samples">
+                <svg><use href="#i-film" /></svg> See sample reels
+              </a>
+            </div>
+            <ul class="hero__points">
+              <li><svg><use href="#i-zap" /></svg> Ready while the expo is still on</li>
+              <li><svg><use href="#i-badge" /></svg> Professional reel creator</li>
+              <li><svg><use href="#i-tag" /></svg> One fixed price</li>
+            </ul>
+          </div>
+
+          <!-- The offer: price, what's included and the sample reels, from `offer` in config.js. -->
+          <aside class="offer" id="samples" aria-labelledby="offer-title" data-offer>
+            <p class="offer__label">The expo reel</p>
+            <p class="offer__price"><span data-offer-price></span><small data-offer-unit></small></p>
+            <h2 id="offer-title" class="offer__title" data-offer-name></h2>
+            <ul class="offer__list" data-offer-includes></ul>
+            <div class="offer__samples" data-offer-samples></div>
+            <a class="btn btn--primary btn--lg btn--block" href="#book">Book my stall reel <svg><use href="#i-arrow" /></svg></a>
+          </aside>
+        </div>
+        <p class="hero__credit wrap">Footage: AOD's coverage of GATE 2026, GCCI's annual trade expo</p>
+      </section>
+
+      <!-- ───────────── Brands ───────────── -->
+      <section class="brands" aria-labelledby="brands-title">
+        <h2 id="brands-title" class="brands__title">Brands and expos that trust AOD</h2>
+        <div class="marquee">
+          <div class="marquee__track" data-brands></div>
+        </div>
+      </section>
+
+      <!-- ───────────── Why cover your stall ───────────── -->
+      <section id="why" class="section" aria-labelledby="why-title">
+        <div class="wrap">
+          <div class="section__head reveal">
+            <p class="eyebrow">Why cover your stall</p>
+            <h2 id="why-title">Why you should cover your stall at the expo</h2>
+            <p class="section__lead">
+              The stall, the travel, the team on the floor: an expo is one of the biggest things your brand spends on all year.
+              Coverage is how that spend keeps working after the last visitor leaves.
+            </p>
+          </div>
+          <ul class="reasons swipe">
+            <li class="reason reveal">
+              <span class="reason__icon"><svg><use href="#i-trend" /></svg></span>
+              <h3>Your biggest spend keeps paying</h3>
+              <p>Three days of footfall turn into months of posts, catalogue shots and sales material.</p>
+            </li>
+            <li class="reason reveal">
+              <span class="reason__icon"><svg><use href="#i-users" /></svg></span>
+              <h3>Reach the people who couldn't come</h3>
+              <p>Reels and posts carry your stall to clients, dealers and buyers who never made it to the venue.</p>
+            </li>
+            <li class="reason reveal">
+              <span class="reason__icon"><svg><use href="#i-badge" /></svg></span>
+              <h3>Look as serious as you are</h3>
+              <p>Buyers check your Instagram and LinkedIn before they call. Proper photos and films show a brand that delivers.</p>
+            </li>
+            <li class="reason reveal">
+              <span class="reason__icon"><svg><use href="#i-mic" /></svg></span>
+              <h3>Testimonials on the spot</h3>
+              <p>Happy clients are standing at your stall. A one-minute interview there is worth more than any brochure.</p>
+            </li>
+            <li class="reason reveal">
+              <span class="reason__icon"><svg><use href="#i-camera" /></svg></span>
+              <h3>Moments you can't redo</h3>
+              <p>Launches, ribbon cuttings, VIP visits and awards happen once. Someone should be ready for them.</p>
+            </li>
+            <li class="reason reveal">
+              <span class="reason__icon"><svg><use href="#i-store" /></svg></span>
+              <h3>Your team stays on the floor</h3>
+              <p>Nobody leaves a conversation with a buyer to take a photo. Your people sell; we capture.</p>
+            </li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- ───────────── Services ───────────── -->
+      <section id="services" class="section section--wash" aria-labelledby="services-title">
+        <div class="wrap">
+          <div class="section__head reveal">
+            <p class="eyebrow">What we do at your stall</p>
+            <h2 id="services-title">Want more than a reel? We do the whole stall</h2>
+            <p class="section__lead">The reel is where most exhibitors start. Add any of these and we quote them together. Every artist is verified by AOD and briefed on your brand.</p>
+          </div>
+          <ul class="services swipe">
+            <li class="service reveal">
+              <img src="assets/img/services/photographers.jpg" alt="" loading="lazy" width="655" height="449" />
+              <div class="service__body">
+                <span class="service__icon"><svg><use href="#i-camera" /></svg></span>
+                <h3>Stall photography</h3>
+                <p>Your products, your team, the crowd and every important visitor, shot properly and edited.</p>
+              </div>
+            </li>
+            <li class="service reveal">
+              <img src="assets/img/services/cinematographers.jpg" alt="" loading="lazy" width="900" height="619" />
+              <div class="service__body">
+                <span class="service__icon"><svg><use href="#i-video" /></svg></span>
+                <h3>Video and product films</h3>
+                <p>Product demos, a stall walkthrough and short films you can use on your website and in sales calls.</p>
+              </div>
+            </li>
+            <li class="service reveal">
+              <img src="assets/img/services/editors.jpg" alt="" loading="lazy" width="720" height="495" />
+              <div class="service__body">
+                <span class="service__icon"><svg><use href="#i-film" /></svg></span>
+                <h3>Same-day reels</h3>
+                <p>An editor turns the day's footage into reels and stories on site, ready to post before the show closes.</p>
+              </div>
+            </li>
+            <li class="service reveal">
+              <img src="assets/img/services/anchors-hosts.jpg" alt="" loading="lazy" width="995" height="684" />
+              <div class="service__body">
+                <span class="service__icon"><svg><use href="#i-mic" /></svg></span>
+                <h3>Anchors and emcees</h3>
+                <p>Launches, live demos, contests and founder interviews, hosted by someone who knows how to hold a crowd.</p>
+              </div>
+            </li>
+            <li class="service reveal">
+              <img src="assets/img/services/models.jpg" alt="" loading="lazy" width="1000" height="688" />
+              <div class="service__body">
+                <span class="service__icon"><svg><use href="#i-users" /></svg></span>
+                <h3>Promoters and models</h3>
+                <p>Friendly faces who welcome visitors, explain the basics and pass the serious leads to your team.</p>
+              </div>
+            </li>
+            <li class="service reveal">
+              <img src="assets/img/services/drone-pilots.jpg" alt="" loading="lazy" width="655" height="358" />
+              <div class="service__body">
+                <span class="service__icon"><svg><use href="#i-drone" /></svg></span>
+                <h3>Drone shots</h3>
+                <p>The venue and the crowd from above, where the organiser allows it. We check the rules first.</p>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- ───────────── AOD portfolio ───────────── -->
+      <section id="portfolio" class="section section--wash" aria-labelledby="portfolio-title">
+        <div class="wrap">
+          <div class="section__head reveal">
+            <p class="eyebrow">AOD portfolio</p>
+            <h2 id="portfolio-title">We've covered expos before</h2>
+            <p class="section__lead">A look at AOD's own expo work. Ask us on WhatsApp for the full showreel.</p>
+          </div>
+          <div class="portfolio">
+            <figure class="portfolio__feature reveal">
+              <div class="portfolio__video">
+                <video data-autoplay muted loop playsinline preload="none" poster="assets/media/hero.webp" aria-label="AOD's coverage of GATE 2026">
+                  <source src="assets/media/hero-1080-av1.mp4" type='video/mp4; codecs="av01.0.08M.08"' />
+                  <source src="assets/media/hero-1080.mp4" type='video/mp4; codecs="avc1.640028"' />
+                </video>
+              </div>
+              <figcaption>
+                <img src="assets/img/brands/gate-2026-expo.png" alt="GATE 2026" height="40" />
+                <span><strong>GATE 2026 – GCCI Annual Trade Expo</strong> Event coverage by AOD: the venue from above, the inaugural session and the show floor.</span>
+              </figcaption>
+            </figure>
+            <div class="portfolio__side reveal">
+              <h3>What we shot there</h3>
+              <ul class="ticks">
+                <li><svg><use href="#i-check" /></svg> Drone shots of the whole expo ground</li>
+                <li><svg><use href="#i-check" /></svg> The inaugural session, on stage and in the crowd</li>
+                <li><svg><use href="#i-check" /></svg> Stalls, visitors and the buzz on the floor</li>
+                <li><svg><use href="#i-check" /></svg> A finished film, edited and ready to share</li>
+              </ul>
+              <p class="portfolio__trust">
+                <img src="assets/img/brands/gcci.png" alt="" width="44" height="44" />
+                Trusted by the Gujarat Chamber of Commerce &amp; Industry and the brands above.
+              </p>
+              <div class="portfolio__ctas">
+                <a class="btn btn--outline" data-instagram href="#" target="_blank" rel="noopener">See more on Instagram</a>
+                <a class="btn btn--wa" data-wa data-wa-text="Hi AOD, please share your expo showreel." href="#" target="_blank" rel="noopener"><svg><use href="#i-whatsapp" /></svg> Ask for the showreel</a>
+              </div>
+            </div>
+          </div>
+          <!-- More work from data/portfolio.js, when there is any. -->
+          <ul class="portfolio__more" data-portfolio hidden></ul>
+        </div>
+      </section>
+
+      <!-- ───────────── Before / during / after ───────────── -->
+      <section class="section" aria-labelledby="timeline-title">
+        <div class="wrap">
+          <div class="section__head reveal">
+            <p class="eyebrow">Before, during and after</p>
+            <h2 id="timeline-title">We cover the whole show, not just the day</h2>
+          </div>
+          <ol class="timeline">
+            <li class="reveal">
+              <span class="timeline__tag">Before the show</span>
+              <h3>Plan and tease</h3>
+              <ul>
+                <li><svg><use href="#i-check" /></svg> A shot list built around your products</li>
+                <li><svg><use href="#i-check" /></svg> Stall set-up shots and a "see you there" teaser</li>
+                <li><svg><use href="#i-check" /></svg> The crew briefed on your brand and key visitors</li>
+              </ul>
+            </li>
+            <li class="reveal">
+              <span class="timeline__tag timeline__tag--live">During the show</span>
+              <h3>Capture and post</h3>
+              <ul>
+                <li><svg><use href="#i-check" /></svg> Demos, crowds, handshakes and VIP visits</li>
+                <li><svg><use href="#i-check" /></svg> Reels and stories edited the same day</li>
+                <li><svg><use href="#i-check" /></svg> Short interviews with clients and your founders</li>
+              </ul>
+            </li>
+            <li class="reveal">
+              <span class="timeline__tag">After the show</span>
+              <h3>Deliver and reuse</h3>
+              <ul>
+                <li><svg><use href="#i-check" /></svg> An edited photo album and a highlight film</li>
+                <li><svg><use href="#i-check" /></svg> Testimonial clips for sales and LinkedIn</li>
+                <li><svg><use href="#i-check" /></svg> Every raw file on one drive link</li>
+              </ul>
+            </li>
+          </ol>
+        </div>
+      </section>
+
+      <!-- ───────────── What you take home ───────────── -->
+      <section id="take-home" class="section section--dark" aria-labelledby="take-title">
+        <div class="wrap take">
+          <div class="take__copy reveal">
+            <p class="eyebrow eyebrow--light">What you take home</p>
+            <h2 id="take-title">Three days of footfall.<br />Months of content.</h2>
+            <p class="section__lead">
+              One expo gives you enough to post for months: product shots for the catalogue, reels for Instagram, testimonials
+              for LinkedIn and a highlight film for your next pitch.
+            </p>
+            <a class="btn btn--primary btn--lg" href="#book">Book my stall reel <svg><use href="#i-arrow" /></svg></a>
+          </div>
+          <ul class="takeaways">
+            <li class="reveal"><svg><use href="#i-image" /></svg><strong>Edited photo album</strong><span>Products, team, crowd and visitors</span></li>
+            <li class="reveal"><svg><use href="#i-film" /></svg><strong>Reels and stories</strong><span>Cut and ready while the show is on</span></li>
+            <li class="reveal"><svg><use href="#i-video" /></svg><strong>Highlight film</strong><span>The whole show in a minute or two</span></li>
+            <li class="reveal"><svg><use href="#i-mic" /></svg><strong>Interview clips</strong><span>Clients and founders, on camera</span></li>
+            <li class="reveal"><svg><use href="#i-trend" /></svg><strong>A posting kit</strong><span>Picks for LinkedIn, Instagram and WhatsApp</span></li>
+            <li class="reveal"><svg><use href="#i-download" /></svg><strong>All raw files</strong><span>Every photo and clip on one drive link</span></li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- ───────────── How it works ───────────── -->
+      <section id="how" class="section" aria-labelledby="how-title">
+        <div class="wrap">
+          <div class="section__head reveal">
+            <p class="eyebrow">How it works</p>
+            <h2 id="how-title">From a chat at your stall to a finished film</h2>
+          </div>
+          <ol class="steps">
+            <li class="step reveal">
+              <span class="step__num">1</span>
+              <h3>Talk to the AOD team</h3>
+              <p>Meet us at the expo or on WhatsApp. Tell us what you want covered and get one clear price.</p>
+            </li>
+            <li class="step reveal">
+              <span class="step__num">2</span>
+              <h3>Book in a minute</h3>
+              <p>Fill in your stall details below, pay by UPI and add the payment screenshot. We confirm on WhatsApp.</p>
+            </li>
+            <li class="step reveal">
+              <span class="step__num">3</span>
+              <h3>We shoot your stall</h3>
+              <p>A professional reel creator comes to your stall on the day you pick, shoots the reel and the photos. You run the show; we capture it.</p>
+            </li>
+          </ol>
+        </div>
+      </section>
+
+      <!-- ───────────── The form ───────────── -->
+      <section id="book" class="section section--wash book" aria-labelledby="book-title">
+        <div class="wrap book__grid">
+          <div class="book__intro">
+            <p class="eyebrow">Book your stall reel</p>
+            <h2 id="book-title">Tell us about your stall</h2>
+            <p class="section__lead">Fill in your stall, pay the amount the AOD team shared with you, and add the payment screenshot. We confirm your booking on WhatsApp.</p>
+            <ul class="book__promises">
+              <li><svg><use href="#i-clock" /></svg> Takes about a minute</li>
+              <li><svg><use href="#i-badge" /></svg> Only verified AOD artists</li>
+              <li><svg><use href="#i-tag" /></svg> One clear price, no haggling</li>
+            </ul>
+            <div class="contact-card">
+              <p class="contact-card__title">Rather talk now?</p>
+              <a data-wa href="#" target="_blank" rel="noopener"><svg><use href="#i-whatsapp" /></svg> WhatsApp AOD</a>
+              <a data-phone href="#"><svg><use href="#i-phone" /></svg> <span data-phone-text></span></a>
+              <a data-email href="#"><svg><use href="#i-mail" /></svg> <span data-email-text></span></a>
+            </div>
+          </div>
+
+          <div class="form-card">
+            <form id="booking-form" novalidate>
+              <!-- 1. Expo -->
+              <fieldset class="group">
+                <legend><span class="group__num">1</span> Which expo?</legend>
+                <div class="field">
+                  <label for="expo">Expo <span class="req" aria-hidden="true">*</span></label>
+                  <div class="select">
+                    <select id="expo" name="expo" required></select>
+                    <svg><use href="#i-chevron" /></svg>
+                  </div>
+                  <p class="field__error" data-error-for="expo"></p>
+                </div>
+                <div class="field" data-other-expo hidden>
+                  <label for="otherExpo">Expo name <span class="req" aria-hidden="true">*</span></label>
+                  <input id="otherExpo" name="otherExpo" type="text" autocomplete="off" placeholder="Name of the expo" />
+                  <p class="field__error" data-error-for="otherExpo"></p>
+                </div>
+                <div class="expo-card" data-expo-card hidden></div>
+              </fieldset>
+
+              <!-- 2. Company and stall -->
+              <fieldset class="group">
+                <legend><span class="group__num">2</span> Your company and stall</legend>
+                <div class="field">
+                  <label for="company">Company name <span class="req" aria-hidden="true">*</span></label>
+                  <input id="company" name="company" type="text" autocomplete="organization" required />
+                  <p class="field__error" data-error-for="company"></p>
+                </div>
+                <div class="field">
+                  <label for="stall">Stall number <span class="req" aria-hidden="true">*</span></label>
+                  <input id="stall" name="stall" type="text" autocomplete="off" placeholder="e.g. B-14" required />
+                  <p class="field__error" data-error-for="stall"></p>
+                </div>
+              </fieldset>
+
+              <!-- 3. Point of contact -->
+              <fieldset class="group">
+                <legend><span class="group__num">3</span> Point of contact</legend>
+                <div class="row">
+                  <div class="field">
+                    <label for="name">Name <span class="req" aria-hidden="true">*</span></label>
+                    <input id="name" name="name" type="text" autocomplete="name" required />
+                    <p class="field__error" data-error-for="name"></p>
+                  </div>
+                  <div class="field">
+                    <label for="role">Designation <span class="req" aria-hidden="true">*</span></label>
+                    <input id="role" name="role" type="text" autocomplete="organization-title" placeholder="e.g. Marketing head" required />
+                    <p class="field__error" data-error-for="role"></p>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="field">
+                    <label for="phone">Contact number <span class="req" aria-hidden="true">*</span></label>
+                    <div class="phone">
+                      <span class="phone__code">+91</span>
+                      <input id="phone" name="phone" type="tel" inputmode="numeric" autocomplete="tel-national" placeholder="10-digit mobile" maxlength="14" required />
+                    </div>
+                    <p class="field__error" data-error-for="phone"></p>
+                  </div>
+                  <div class="field">
+                    <label for="email">Email address <span class="req" aria-hidden="true">*</span></label>
+                    <input id="email" name="email" type="email" autocomplete="email" placeholder="you@company.com" required />
+                    <p class="field__error" data-error-for="email"></p>
+                  </div>
+                </div>
+              </fieldset>
+
+              <!-- 4. Shoot -->
+              <fieldset class="group">
+                <legend><span class="group__num">4</span> The shoot</legend>
+                <div class="field" data-days-field>
+                  <p class="label" id="days-label">Preferred date to shoot <span class="req" aria-hidden="true">*</span></p>
+                  <p class="hint">Pick one or more days of the expo.</p>
+                  <div class="chips" role="group" aria-labelledby="days-label" data-days></div>
+                  <div class="field" data-date-input hidden>
+                    <input id="shootDate" name="shootDate" type="date" aria-labelledby="days-label" />
+                  </div>
+                  <p class="field__error" data-error-for="days"></p>
+                </div>
+                <div class="field">
+                  <label for="brief">Brief for the artists <span class="opt">optional</span></label>
+                  <textarea id="brief" name="brief" rows="4" placeholder="What you're showcasing, the shots you must have, a launch or VIP visit time, the look you want…"></textarea>
+                </div>
+              </fieldset>
+
+              <!-- 5. Payment -->
+              <fieldset class="group">
+                <legend><span class="group__num">5</span> Payment</legend>
+                <div class="pay" data-pay></div>
+                <div class="field">
+                  <p class="label" id="proof-label">Payment done screenshot <span class="req" aria-hidden="true">*</span></p>
+                  <label class="upload" data-upload>
+                    <input id="proof" name="proof" type="file" accept="image/*" aria-labelledby="proof-label" />
+                    <span class="upload__empty" data-upload-empty>
+                      <svg><use href="#i-image" /></svg>
+                      <strong>Add the screenshot</strong>
+                      <small>From your UPI app or bank, after paying</small>
+                    </span>
+                    <span class="upload__filled" data-upload-filled hidden>
+                      <img alt="Your payment screenshot" data-upload-preview />
+                      <span><strong data-upload-name></strong><small>Tap to change</small></span>
+                    </span>
+                  </label>
+                  <p class="field__error" data-error-for="proof"></p>
+                </div>
+              </fieldset>
+
+              <!-- Spam trap: not displayed, so people and browser autofill never reach it. -->
+              <input class="trap" type="text" name="aod_trap" tabindex="-1" autocomplete="off" aria-hidden="true" />
+
+              <label class="consent">
+                <input type="checkbox" name="consent" id="consent" required />
+                <span>AOD can contact me on WhatsApp, phone or email about this booking. <a data-privacy href="#" target="_blank" rel="noopener">Privacy policy</a></span>
+              </label>
+              <p class="field__error" data-error-for="consent"></p>
+
+              <p class="form-error" role="alert" data-form-error hidden></p>
+              <button class="btn btn--primary btn--lg btn--block" type="submit" data-submit>
+                <span data-submit-label>Send booking request</span>
+              </button>
+              <p class="form-note" data-form-note></p>
+              <p class="met-by" data-met-by hidden></p>
+            </form>
+
+            <!-- Shown after sending (filled in by app.js). -->
+            <div class="done" data-done hidden tabindex="-1">
+              <span class="done__icon"><svg><use href="#i-check" /></svg></span>
+              <h3 data-done-title></h3>
+              <p data-done-text></p>
+              <p class="done__ref" data-done-ref hidden></p>
+              <div class="done__actions">
+                <a class="btn btn--wa btn--lg" data-done-wa href="#" target="_blank" rel="noopener"><svg><use href="#i-whatsapp" /></svg> <span data-done-wa-label></span></a>
+                <button class="btn btn--outline btn--lg" type="button" data-again><svg><use href="#i-plus" /></svg> Book another stall</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ───────────── FAQ ───────────── -->
+      <section id="faq" class="section" aria-labelledby="faq-title">
+        <div class="wrap faq">
+          <div class="section__head reveal">
+            <p class="eyebrow">Questions</p>
+            <h2 id="faq-title">Before you book</h2>
+          </div>
+          <div class="faq__list">
+            <details>
+              <summary>The expo has already started. Can you still come?<svg><use href="#i-chevron" /></svg></summary>
+              <p>Often, yes. Send your stall number and the days you need, and we'll tell you honestly which crew is free and how soon they can be there.</p>
+            </details>
+            <details>
+              <summary>Can we book just one day, or a few hours?<svg><use href="#i-chevron" /></svg></summary>
+              <p>Yes. Pick only the days you need in the form and mention the hours in "Anything else?". Launches and VIP visits can be covered on their own.</p>
+            </details>
+            <details>
+              <summary>What do we need to arrange?<svg><use href="#i-chevron" /></svg></summary>
+              <p>Exhibitor or crew passes for our team, from you or the organiser, and a corner of the stall to keep a bag. We bring all the equipment.</p>
+            </details>
+            <details>
+              <summary>Who owns the photos and videos?<svg><use href="#i-chevron" /></svg></summary>
+              <p>They're yours to use for your brand, everywhere. If we'd like to show a few in AOD's own portfolio, we'll ask first.</p>
+            </details>
+            <details>
+              <summary>How do we pay?<svg><use href="#i-chevron" /></svg></summary>
+              <p>Pay the amount the AOD team shared with you by UPI, using the details in the form, and add the payment screenshot. Your booking is confirmed once we've checked the payment, and we tell you on WhatsApp.</p>
+            </details>
+            <details>
+              <summary>Are drones allowed inside expos?<svg><use href="#i-chevron" /></svg></summary>
+              <p>Only where the venue and organiser allow it. We check the rules for your expo before we promise any aerial shots.</p>
+            </details>
+          </div>
+        </div>
+      </section>
+
+      <!-- ───────────── Last nudge ───────────── -->
+      <section class="final" aria-labelledby="final-title">
+        <div class="wrap final__inner">
+          <h2 id="final-title">The show won't wait. Neither should your content.</h2>
+          <p>Book your reel now and walk away with content worth posting.</p>
+          <div class="final__ctas">
+            <a class="btn btn--white btn--lg" href="#book">Book my stall reel <svg><use href="#i-arrow" /></svg></a>
+            <a class="btn btn--ghost btn--lg" data-wa href="#" target="_blank" rel="noopener"><svg><use href="#i-whatsapp" /></svg> WhatsApp us</a>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <div class="wrap footer__row">
+        <div>
+          <img src="assets/img/aod-wordmark.png" alt="AOD" width="85" height="24" />
+          <p>Artists on Demand · verified photographers, videographers, anchors and more across Gujarat.</p>
+        </div>
+        <ul class="footer__links">
+          <li><a data-site href="#" target="_blank" rel="noopener">aod.co.in</a></li>
+          <li><a data-phone href="#"><span data-phone-text></span></a></li>
+          <li><a data-email href="#"><span data-email-text></span></a></li>
+          <li><a data-instagram href="#" target="_blank" rel="noopener">Instagram</a></li>
+          <li><a data-privacy href="#" target="_blank" rel="noopener">Privacy</a></li>
+        </ul>
+      </div>
+      <p class="wrap footer__copy">© <span data-year></span> Artists on Demand</p>
+    </footer>
+
+    <!-- Phones: a bar at the bottom until the form is on screen. -->
+    <div class="mobile-cta" data-mobile-cta>
+      <a class="btn btn--primary btn--lg" href="#book">Book my stall reel</a>
+      <a class="icon-btn icon-btn--wa icon-btn--lg" data-wa href="#" target="_blank" rel="noopener" aria-label="Chat with AOD on WhatsApp">
+        <svg><use href="#i-whatsapp" /></svg>
+      </a>
+    </div>
+  </body>
+</html>
