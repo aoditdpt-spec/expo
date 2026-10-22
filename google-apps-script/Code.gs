@@ -7,10 +7,12 @@
  *   company logo, when one is added, in "AOD expo company logos"; their links go in the row.
  * - The team gets an email for each booking (NOTIFY_EMAIL below; leave it empty for no email).
  *
+ * Set up and deployed from aod.itdpt@gmail.com (the account of the aod.co.in orders sheet), so the
+ * Sheet, the Drive folders and the emails (sent from it) all belong to that account.
  * Setup is in sheetsguide.md.
  */
 
-const NOTIFY_EMAIL = "communication.aod@gmail.com";
+const NOTIFY_EMAIL = "communication.aod@gmail.com"; // AOD's team inbox; the email comes from aod.itdpt@gmail.com
 const FOLDER_NAME = "AOD expo payment screenshots";
 const LOGO_FOLDER_NAME = "AOD expo company logos";
 const ALL_TAB = "All expo bookings";
