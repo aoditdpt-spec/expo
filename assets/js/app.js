@@ -54,13 +54,26 @@
   $$("[data-privacy]").forEach((a) => (a.href = `${config.siteUrl}/privacy`));
   $$("[data-year]").forEach((el) => (el.textContent = String(new Date().getFullYear())));
 
-  // ───────────── "Now booking" line in the hero ─────────────
+  // ───────────── "Now booking" and "Congratulations" lines in the hero ─────────────
+  // About one expo when the link names it (…/?expo=iif-2026, the expo's own QR code) or when only one
+  // is on; otherwise about all of them ("Booking now for FIRSST 2026 & IIF 2026 · Gandhinagar").
+  const linkedExpo = openExpos.find((e) => e.id === new URLSearchParams(location.search).get("expo"));
+  const featured = linkedExpo || (openExpos.length === 1 ? openExpos[0] : null);
   (function liveChip() {
-    const expo = openExpos[0];
-    if (!expo) return;
-    const where = [expo.venue, expo.city].filter(Boolean).join(", ");
-    const when = expoStatus(expo) === "live" ? `On now, till ${fmt(expo.days[expo.days.length - 1], { day: "numeric", month: "short" })}` : rangeText(expo.days);
-    $("[data-live-text]").textContent = `Booking now for ${expo.name} · ${when}${where ? ` · ${where}` : ""}`;
+    if (!openExpos.length) return;
+    let text;
+    if (featured) {
+      const where = [featured.venue, featured.city].filter(Boolean).join(", ");
+      const end = featured.days[featured.days.length - 1];
+      const when = expoStatus(featured) === "live" ? `On now, till ${fmt(end, { day: "numeric", month: "short" })}` : rangeText(featured.days);
+      text = `Booking now for ${featured.name} · ${when}${where ? ` · ${where}` : ""}`;
+    } else {
+      const names = openExpos.map((e) => e.name);
+      const list = names.length > 1 ? `${names.slice(0, -1).join(", ")} & ${names[names.length - 1]}` : names[0];
+      const cities = [...new Set(openExpos.map((e) => e.city).filter(Boolean))];
+      text = `Booking now for ${list}${cities.length === 1 ? ` · ${cities[0]}` : ""}`;
+    }
+    $("[data-live-text]").textContent = text;
     $("[data-live]").hidden = false;
   })();
 
@@ -89,7 +102,8 @@
   })();
 
   // "Congratulations on your stall at FIRSST 2026 🎉" when an expo is on or coming up.
-  if (openExpos[0]) $("[data-congrats]").textContent = `Congratulations on your stall at ${openExpos[0].name} 🎉`; // keeps the 🎉 on the name's line
+  // (Without one expo in view it keeps the page's "Congratulations on your stall at the expo 🎉".)
+  if (featured) $("[data-congrats]").textContent = `Congratulations on your stall at ${featured.name} 🎉`; // keeps the 🎉 on the name's line
 
   // ───────────── Brand logos (two copies, so the loop never shows a gap) ─────────────
   (function brands() {
@@ -438,13 +452,14 @@
     expoCard.innerHTML = lines.join("");
     expoCard.hidden = false;
 
-    // A chip per day; days already over can't be picked. Today is picked to start with.
+    // A chip per day, and one day can be picked (a radio); days already over can't be picked. Today is
+    // picked to start with.
     daysWrap.innerHTML = (expo.days || [])
       .map((day) => {
         const past = day < todayIST;
         const note = day === todayIST ? "Today" : past ? "Over" : "";
         return `<label class="chip${past ? " chip--past" : ""}">
-          <input type="checkbox" name="days" value="${day}"${past ? " disabled" : ""}${day === todayIST ? " checked" : ""} />
+          <input type="radio" name="days" value="${day}"${past ? " disabled" : ""}${day === todayIST ? " checked" : ""} />
           <span>${dayLabel(day)}${note ? `<small>${note}</small>` : ""}</span>
         </label>`;
       })
@@ -527,7 +542,7 @@
     amountEl.textContent = rupees(amount);
     $("[data-pay-breakdown]").textContent = days.length
       ? `${n} day${n > 1 ? "s" : ""} × ${priceText}`
-      : `${priceText} a day · pick your shoot days above`;
+      : `${priceText} a day · pick your shoot day above`;
     if (!pay.upiId) return;
     const company = form.elements.company.value.trim();
     const note = `AOD expo reel${company ? ` ${company}` : ""}`.slice(0, 40);
@@ -698,7 +713,7 @@
     else if (!/^[6-9]\d{9}$/.test(d.phone)) ok = showError("phone", "Please enter a 10-digit Indian mobile number.");
     if (!d.email) ok = showError("email", "Please add an email address.");
     else if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(d.email)) ok = showError("email", "That email doesn't look right.");
-    if (!d.days.length) ok = showError("days", "Please pick at least one day to shoot.");
+    if (!d.days.length) ok = showError("days", "Please pick the day to shoot.");
     if (!files.proof) ok = showError("proof", "Please add the screenshot of your payment.");
     if (!d.consent) ok = showError("consent", "Please tick this so we can contact you about the booking.");
     return ok;

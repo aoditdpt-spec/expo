@@ -19,4 +19,15 @@ window.AOD_EXPOS = [
     organiser: "Brahmani Events",
     website: "https://firsst.in/",
   },
+  {
+    id: "iif-2026",
+    name: "IIF 2026",
+    fullName: "IIF 2026 – Indian Industrial Fair (Udyam 2026)",
+    sector: "Industrial fair for MSMEs",
+    days: ["2026-10-23", "2026-10-24", "2026-10-25", "2026-10-26"],
+    venue: "Helipad Ground",
+    city: "Gandhinagar",
+    organiser: "Laghu Udyog Bharati",
+    website: "https://lubindiaexpo.com/",
+  },
 ];

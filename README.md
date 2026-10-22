@@ -30,9 +30,9 @@ No framework and no build step: plain HTML, CSS and JavaScript. `npm run dev` on
 ## Before using it with real exhibitors
 
 1. **Google Sheet: connected** (22 Oct 2026). The Sheet and the script are on aod.itdpt@gmail.com (the account of the aod.co.in orders sheet), `submitUrl` in `config.js` points to the web app, and each booking adds a row, saves the screenshot and logo to Drive and emails communication.aod@gmail.com. `sheetsguide.md` is how it was set up. If `submitUrl` is ever emptied, the form goes back to opening WhatsApp with the booking and saving nothing.
-2. **Payment details.** `payment` in `config.js` has the UPI ID (`thakkardhruvi5701@oksbi`, the account of Dhruvi Thakkar) and the QR (`assets/img/upi-qr.png`, cut from the Google Pay QR). The amount to pay is the offer's price for each shoot day picked (1 day ₹3,499, 2 days ₹6,998, 3 days ₹10,497) and updates as days are ticked. On phones, tapping the QR, the UPI ID or "Pay ₹… in your UPI app" opens the UPI app with that amount filled in; iPhones also get Google Pay, PhonePe and Paytm buttons. On laptops the QR is scanned with a phone and the amount is shown big to type in. Some UPI apps refuse a payment link to a personal UPI ID: BHIM says "request type not supported" (Google Pay accepts it), so under the Pay button the page tells people to copy the UPI ID and pay the amount by hand. Scanning the QR from another phone also works, and a business (merchant) UPI ID avoids the problem in every app. To change the account, change `upiId` and `payeeName` and replace the QR image.
+2. **Payment details.** `payment` in `config.js` has the UPI ID (`thakkardhruvi5701@oksbi`, the account of Dhruvi Thakkar) and the QR (`assets/img/upi-qr.png`, cut from the Google Pay QR). Each booking is for one shoot day (the form takes one date), so the amount to pay is the offer's price, ₹3,499. On phones, tapping the QR, the UPI ID or "Pay ₹… in your UPI app" opens the UPI app with that amount filled in; iPhones also get Google Pay, PhonePe and Paytm buttons. On laptops the QR is scanned with a phone and the amount is shown big to type in. Some UPI apps refuse a payment link to a personal UPI ID: BHIM says "request type not supported" (Google Pay accepts it), so under the Pay button the page tells people to copy the UPI ID and pay the amount by hand. Scanning the QR from another phone also works, and a business (merchant) UPI ID avoids the problem in every app. To change the account, change `upiId` and `payeeName` and replace the QR image.
 3. **Check the offer.** `offer` in `config.js` holds the price, what's included and the sample reel links. Make sure both Drive links are shared as "Anyone with the link".
-4. **Confirm the promises.** The page says the reel is "ready to post while the expo is still on", Change it in `index.html` if that isn't how AOD works.
+4. **Expos on the page:** FIRSST 2026 (22–24 Oct, Helipad Exhibition Centre) and IIF 2026, the Indian Industrial Fair by Laghu Udyog Bharati (23–26 Oct, Helipad Ground), both in Gandhinagar. Add the next one in `data/expos.js`.
 
 ## Adding an expo
 
@@ -57,7 +57,7 @@ The page uses it everywhere:
 
 - The **expo list** in the form shows every expo that hasn't ended yet, in date order. Past expos drop out by themselves (Indian time), so they can stay in the file as a record.
 - The **"Booking now for …"** line and the **"Congratulations on your stall at …"** line use the next expo.
-- The **days** in the form are that expo's days. Today's date is ticked to start with, and days already over can't be picked.
+- The **days** in the form are that expo's days, and one can be picked (one booking, one shoot day). Today's date is picked to start with, and days already over can't be picked.
 - In the Google Sheet, the expo gets its own tab with its first booking.
 
 ## Links for the team
@@ -87,6 +87,8 @@ The page is live at **https://expo-two-ochre.vercel.app/** (Vercel, from this re
 npx -y qrcode@1.5.4 -e H -w 1600 -m 4 -o qr/expo-page-qr.png "https://NEW-ADDRESS/"
 npx -y qrcode@1.5.4 -e H -m 4 -t svg -o qr/expo-page-qr.svg "https://NEW-ADDRESS/"
 ```
+
+Each expo also has its own QR, which opens the page with that expo already picked and the hero naming it: `qr/firsst-2026-qr.png` / `.svg` (`?expo=firsst-2026`) and `qr/iif-2026-qr.png` / `.svg` (`?expo=iif-2026`). For a new expo, run the same commands with `?expo=<its id>`.
 
 A team member's own QR (bookings show "Met by" with their name) is the same command with `?by=Name` on the address, e.g. `https://expo-two-ochre.vercel.app/?by=Riya`.
 

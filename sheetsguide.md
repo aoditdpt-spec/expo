@@ -93,7 +93,7 @@ The page now changes by itself:
 | Company logo | Empty: the form no longer asks for a logo (removed 22 Oct 2026). The column stays so the headings line up with the rows; the script still saves a logo to **AOD expo company logos** if one is ever sent. |
 | Stall | Stall number |
 | Package | What they booked, from `offer` in `config.js` |
-| Amount | What they should have paid: the price for each shoot day, such as "₹6,998 (2 days × ₹3,499)". Check it against the payment screenshot. |
+| Amount | What they should have paid, such as "₹3,499 (1 day × ₹3,499)" (one shoot day per booking). Check it against the payment screenshot. |
 | Contact person / Designation / Phone / Email | Their point of contact |
 | Shoot dates | The day or days they picked (YYYY-MM-DD) |
 | Brief for the artists | What they want shot (optional) |
