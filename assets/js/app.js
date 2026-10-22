@@ -173,7 +173,7 @@
   // The reel in the hero's middle column (heroVideo in config.js). It plays muted while on screen,
   // with a round button for sound, and a tap on the video pauses it or plays it again. On laptops
   // and desktops (a wide screen and a mouse), scrolling past the hero shrinks it into a small player
-  // in the bottom-right corner that keeps playing, with a ✕ to close it (it then stays closed for
+  // in the bottom-left corner that keeps playing, with a ✕ to close it (it then stays closed for
   // the visit); scrolling back up returns it to its place. Someone who paused it doesn't get the
   // small player. It starts only once the rest of the page has loaded, so the reel never slows the
   // first view; with reduced motion or Data Saver it waits for a tap instead (player controls).
@@ -492,7 +492,12 @@
       const id = `<code>${escapeHtml(pay.upiId)}</code>`;
       parts.push(`<div class="pay__upi">${tap ? `<a class="pay__id" data-upi-link>${id}</a>` : id}<button class="pay__copy" type="button" data-copy="${escapeHtml(pay.upiId)}">Copy UPI ID</button></div>`);
     }
-    if (tap) parts.push(`<a class="btn btn--primary btn--lg pay__app" data-upi-link><span data-pay-cta></span></a>`);
+    if (tap) {
+      parts.push(`<a class="btn btn--primary btn--lg pay__app" data-upi-link><span data-pay-cta></span></a>`);
+      // Some UPI apps (BHIM especially) refuse payment links to a personal UPI ID with "request type
+      // not supported"; the way round is to pay the UPI ID by hand.
+      parts.push(`<p class="pay__hint" data-pay-hint></p>`);
+    }
     if (tap && appleDevice)
       parts.push(`<p class="pay__or">Or open your app:</p><div class="pay__apps">${upiApps.map((a) => `<a class="pay__appbtn" data-upi-app="${a.base}">${a.label}</a>`).join("")}</div>`);
     parts.push(`</div>`);
@@ -534,6 +539,8 @@
     $$("[data-upi-app]").forEach((a) => (a.href = a.dataset.upiApp + query));
     const cta = $("[data-pay-cta]");
     if (cta) cta.textContent = `Pay ${rupees(amount)} in your UPI app`;
+    const hint = $("[data-pay-hint]");
+    if (hint) hint.textContent = `If your app says the request isn't supported (BHIM does this), copy the UPI ID above and pay ${rupees(amount)} in your app.`;
   }
 
 
