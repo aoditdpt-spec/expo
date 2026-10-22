@@ -1,6 +1,6 @@
 # Saving expo bookings to Google Sheets
 
-Right now the form has nowhere to save bookings, so it opens WhatsApp with the booking typed out and says nothing was saved. Follow these steps once and every booking lands in a Google Sheet instead:
+**Status: connected on 22 Oct 2026.** The Sheet and the script are on aod.itdpt@gmail.com, and the web app address is `submitUrl` in `config.js`. Keep this guide for redoing the setup or making another one. (Without a `submitUrl`, the form opens WhatsApp with the booking typed out and says nothing was saved.) Following these steps, every booking lands in a Google Sheet:
 
 - a row on the **All expo bookings** tab
 - a row on a tab named after the expo, such as **FIRSST 2026** (made by itself on the first booking for that expo)

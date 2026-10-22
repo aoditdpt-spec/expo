@@ -1,9 +1,9 @@
 // Settings for the expo page. Change these here, not in the page itself.
 window.AOD_EXPO_CONFIG = {
   // Where requests go first: the address of the Google Apps Script web app in
-  // google-apps-script/Code.gs (see README.md), which adds each request to a Google Sheet.
+  // google-apps-script/Code.gs (see sheetsguide.md), which adds each request to a Google Sheet.
   // While it's empty, the form hands the request to WhatsApp instead and says nothing was saved.
-  submitUrl: "",
+  submitUrl: "https://script.google.com/macros/s/AKfycbwredBXh1DoPkmoGpcSUoyW7egpQSkk4WgN0Uqu0JcTiwum4oJYiwG_0CwDHbr2OdIX/exec",
 
   // AOD's WhatsApp / phone and email.
   whatsappNumber: "919274739763",
