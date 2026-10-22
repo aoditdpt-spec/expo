@@ -363,13 +363,11 @@
   const params = new URLSearchParams(location.search);
   const metBy = (params.get("by") || "").trim().slice(0, 60);
   const saving = Boolean(config.submitUrl);
-  // The two uploads, shrunk in the browser so they send fast on expo Wi-Fi: the payment screenshot
-  // to 1600px JPEG, the logo to 1000px PNG (keeping a transparent background). Each is kept as
-  // { name, type, data, original } with data as base64 (no "data:" prefix).
-  const files = { proof: null, logo: null };
+  // The upload (the payment screenshot), shrunk in the browser to 1600px JPEG so it sends fast on
+  // expo Wi-Fi. Kept as { name, type, data, original } with data as base64 (no "data:" prefix).
+  const files = { proof: null };
   const uploadSettings = {
     proof: { max: 1600, type: "image/jpeg", unreadable: "Couldn't read that image. Please try another screenshot." },
-    logo: { max: 1000, type: "image/png", unreadable: "Couldn't read that image. Please try a PNG or JPG of your logo." },
   };
   const uploadBox = (name) => $(`[data-upload="${name}"]`);
 
@@ -728,7 +726,6 @@
       `Shoot date${d.days.length > 1 ? "s" : ""}: ${d.days.map(dayLabel).join(", ")}`,
     ];
     if (d.brief) lines.push(`Brief for the artists: ${d.brief}`);
-    if (files.logo) lines.push(savedProof ? "Company logo: added on the booking page" : "Company logo: attaching it in this chat");
     lines.push(savedProof ? "Payment screenshot: added on the booking page" : "Payment screenshot: attaching it in this chat");
     if (d.metBy) lines.push(`Met by: ${d.metBy}`);
     return lines.join("\n");
@@ -775,7 +772,7 @@
       window.open(waUrl(lastMessage), "_blank", "noopener");
       return showDone({
         title: "Finish on WhatsApp",
-        text: `WhatsApp opened with your booking. Attach your payment screenshot${files.logo ? " and your logo" : ""} and press send; AOD confirms your booking there. Nothing has been saved on this page yet.`,
+        text: `WhatsApp opened with your booking. Attach your payment screenshot and press send; AOD confirms your booking there. Nothing has been saved on this page yet.`,
         ref,
         waLabel: "Open WhatsApp again",
       });
@@ -783,7 +780,7 @@
 
     setBusy(true);
     const strip = (f) => (f ? { name: f.name, type: f.type, data: f.data } : null);
-    const payload = { ...d, ref, createdAt: new Date().toISOString(), page: location.href, proof: strip(files.proof), logo: strip(files.logo) };
+    const payload = { ...d, ref, createdAt: new Date().toISOString(), page: location.href, proof: strip(files.proof) };
     try {
       const res = await fetch(config.submitUrl, {
         method: "POST",

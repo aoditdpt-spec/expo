@@ -5,7 +5,7 @@ A single static page that the AOD team uses at expos to pitch exhibiting brands 
 - **The pitch** (no background video; on laptops three columns of the same height: the text, a 9:16 reel in the middle (`heroVideo` in `config.js`: now the GTZ stall reel, `assets/media/gtz-reel.mp4`, with GTZ's watermark cropped out; muted, with a sound button; a tap pauses or plays it; on laptops and desktops it shrinks into a small player in the bottom-left corner after scrolling past the hero, with a ✕ to close it; an empty "VIDEO HERE" box when `src` is empty), and the offer card): "Congratulations on your stall 🎉", the headline "You built a premium stall. Turn it into a reel that gets seen, shared, and remembered." and the expo reel offer (~~₹5,000~~ ₹3,499 for 1 reel and stall photos, shot on high quality camera by a professional reel creator), with links to sample reels.
 - **Brands that trust AOD:** a scrolling strip of logos.
 - **The AOD portfolio:** AOD's own coverage of GATE 2026.
-- **The booking form** (straight after the logos, before the portfolio): expo, company name, company logo (optional), stall number, point of contact (name, designation, number, email), preferred shoot date, a brief for the artists (optional) and the payment screenshot.
+- **The booking form** (straight after the logos, before the portfolio): expo, company name, stall number, point of contact (name, designation, number, email), preferred shoot date, a brief for the artists (optional) and the payment screenshot.
 - **A last "book now" band.**
 
 The page works for every expo, current and upcoming. The expos come from one data file, so adding the next one is a copy-and-paste (see below).
@@ -79,6 +79,17 @@ Then open http://localhost:3001. Nothing to install: `scripts/serve.mjs` is a ti
 
 (Opening `index.html` straight from the folder also works, but the server is closer to how it runs online.)
 
+## The live page and its QR code
+
+The page is live at **https://expo-two-ochre.vercel.app/** (Vercel, from this repo). `qr/expo-page-qr.png` (1600×1600, for printing) and `qr/expo-page-qr.svg` (sharp at any size, for standees and banners) are QR codes of that address, with high error correction so they still scan when printed small or partly covered. If the address changes (for example to expo.aod.co.in), make new ones:
+
+```bash
+npx -y qrcode@1.5.4 -e H -w 1600 -m 4 -o qr/expo-page-qr.png "https://NEW-ADDRESS/"
+npx -y qrcode@1.5.4 -e H -m 4 -t svg -o qr/expo-page-qr.svg "https://NEW-ADDRESS/"
+```
+
+A team member's own QR (bookings show "Met by" with their name) is the same command with `?by=Name` on the address, e.g. `https://expo-two-ochre.vercel.app/?by=Riya`.
+
 ## Putting the page online
 
 The folder is a plain static site; any static host works. The simplest is **Vercel**, where aod.co.in already lives:
@@ -98,6 +109,6 @@ Put real AOD work only. Add photos to `assets/img/portfolio/` and short videos t
 ## How a booking is sent
 
 1. The form checks every field on the phone: a 10-digit Indian mobile, a valid email, at least one shoot date and the screenshot. Typed answers survive a reload.
-2. The payment screenshot (longest side 1600px, JPEG) and the logo (1000px, PNG, so a transparent background stays transparent) are shrunk on the phone so they upload quickly on expo Wi-Fi.
-3. **With the Sheet connected:** the booking, the screenshot and the logo go to the Google Apps Script. The page says "Booking received" only after the script has saved it.
-4. **Without it, or if saving fails:** WhatsApp opens to AOD's number with the whole booking typed out, and the person attaches the screenshot (and the logo) in the chat.
+2. The payment screenshot is shrunk on the phone (longest side 1600px, JPEG) so they upload quickly on expo Wi-Fi.
+3. **With the Sheet connected:** the booking and the screenshot go to the Google Apps Script. The page says "Booking received" only after the script has saved it.
+4. **Without it, or if saving fails:** WhatsApp opens to AOD's number with the whole booking typed out, and the person attaches the screenshot in the chat.

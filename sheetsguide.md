@@ -4,7 +4,7 @@
 
 - a row on the **All expo bookings** tab
 - a row on a tab named after the expo, such as **FIRSST 2026** (made by itself on the first booking for that expo)
-- the **payment screenshot** and the **company logo** (when one is added) saved in Google Drive, with their links in the row
+- the **payment screenshot** saved in Google Drive, with its link in the row
 - an **email** to the team for each booking
 
 It takes about 10 minutes and needs no coding.
@@ -72,11 +72,11 @@ The page now changes by itself:
 
 ## 5. Test it once
 
-1. Open the page and fill in the form with test details: company "TEST", any logo, any stall number, your own phone and email, and any screenshot.
+1. Open the page and fill in the form with test details: company "TEST", any stall number, your own phone and email, and any screenshot.
 2. Press **Book my stall reel**. You should see **Booking received**.
 3. Check that all three things happened:
    - **The Sheet:** a row on **All expo bookings** and on **FIRSST 2026**.
-   - **Google Drive:** the screenshot in **AOD expo payment screenshots** and the logo in **AOD expo company logos**. Their links are in the row's "Payment screenshot" and "Company logo" columns.
+   - **Google Drive:** the screenshot in **AOD expo payment screenshots**. Its link is in the row's "Payment screenshot" column.
    - **Email:** "New expo booking EXP-… · TEST · stall …" from aod.itdpt@gmail.com in the `NOTIFY_EMAIL` inbox (communication.aod@gmail.com unless you changed it).
 4. Delete the test rows from both tabs and the test images from both Drive folders.
 
@@ -90,7 +90,7 @@ The page now changes by itself:
 | Reference | The booking's reference (`EXP-YYMMDD-XXXX`), also shown to the exhibitor |
 | Expo | The expo and its dates |
 | Company | Company name |
-| Company logo | A link to the logo in Drive; empty if none was added |
+| Company logo | Empty: the form no longer asks for a logo (removed 22 Oct 2026). The column stays so the headings line up with the rows; the script still saves a logo to **AOD expo company logos** if one is ever sent. |
 | Stall | Stall number |
 | Package | What they booked, from `offer` in `config.js` |
 | Amount | What they should have paid: the price for each shoot day, such as "₹6,998 (2 days × ₹3,499)". Check it against the payment screenshot. |

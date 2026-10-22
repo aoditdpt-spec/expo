@@ -1578,14 +1578,6 @@ textarea:focus {
   font-size: 0.9rem;
 }
 
-/* A logo is shown whole, on white, rather than cropped like a screenshot. */
-.upload--logo .upload__filled img {
-  padding: 0.35rem;
-  border: 1px solid var(--line);
-  background: #fff;
-  object-fit: contain;
-}
-
 .upload.is-invalid {
   border-color: var(--error);
 }
