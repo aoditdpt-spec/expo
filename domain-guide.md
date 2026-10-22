@@ -64,8 +64,37 @@ Open **https://expos.aod.co.in** on a phone and a laptop:
 ## 5. After it works
 
 - **New QR codes.** The QR codes in `qr/` point to expo-two-ochre.vercel.app. Make new ones for expos.aod.co.in before printing (the commands are in `README.md`, under "The live page and its QR code"), or ask for them. The old ones keep working as long as the vercel.app address does.
-- **Optional:** send expo-two-ochre.vercel.app on to expos.aod.co.in, so everyone lands on one address. That's a small `vercel.json` redirect in this project.
+- **Old link and old QR codes:** send them to the new address (step 6).
 - **Optional:** link the page from aod.co.in, for example in the footer or the More menu.
+
+## 6. Send the old link and old QR codes to the new address
+
+Do this only **after** step 4 works. Before that, the redirect would send people to an address that doesn't open yet.
+
+Anyone opening `https://expo-two-ochre.vercel.app/…`, including by scanning an old QR code, should land on the same page at expos.aod.co.in. The rest of the link is kept: `…vercel.app/?expo=iif-2026&by=Riya` goes to `expos.aod.co.in/?expo=iif-2026&by=Riya`.
+
+**Option A (recommended): a `vercel.json` in this project.** It's in the code, so it's kept with the page and visible on GitHub. Create `vercel.json` next to `index.html` with:
+
+```json
+{
+  "redirects": [
+    {
+      "source": "/:path*",
+      "has": [{ "type": "host", "value": "expo-two-ochre.vercel.app" }],
+      "destination": "https://expos.aod.co.in/:path*",
+      "permanent": true
+    }
+  ]
+}
+```
+
+Then push. Only the old address is redirected (the `host` rule). Vercel's preview links and expos.aod.co.in itself are untouched, and the query part (`?expo=…`, `?by=…`) carries over.
+
+**Option B: in Vercel's settings, no code.** Expo project → **Settings** → **Domains** → next to `expo-two-ochre.vercel.app`, click **Edit** → choose **Redirect to** `expos.aod.co.in` with **308 Permanent Redirect** → **Save**. If Vercel doesn't offer a redirect for the vercel.app address, use option A.
+
+**Check it.** Open `https://expo-two-ochre.vercel.app/?expo=iif-2026` on a phone; the address bar should change to `https://expos.aod.co.in/?expo=iif-2026`. Scan an old QR code too.
+
+**Afterwards:** print new QR codes that point straight at expos.aod.co.in, so nobody depends on the redirect. Keep the expo project's vercel.app address; don't delete or rename it, or the old QR codes stop working.
 
 ## If something goes wrong
 
