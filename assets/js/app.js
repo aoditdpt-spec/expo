@@ -170,20 +170,33 @@
     playWhileVisible(video);
   });
 
-  // The reel in the hero's middle column (heroVideo in config.js): plays muted while on screen, with a
-  // round button for sound. It starts only once the rest of the page has loaded, so the reel never
-  // slows the first view; with reduced motion or Data Saver it waits for a tap (player controls).
+  // The reel in the hero's middle column (heroVideo in config.js). It plays muted while on screen,
+  // with a round button for sound, and a tap on the video pauses it or plays it again. On laptops
+  // and desktops (a wide screen and a mouse), scrolling past the hero shrinks it into a small player
+  // in the bottom-right corner that keeps playing, with a ✕ to close it (it then stays closed for
+  // the visit); scrolling back up returns it to its place. Someone who paused it doesn't get the
+  // small player. It starts only once the rest of the page has loaded, so the reel never slows the
+  // first view; with reduced motion or Data Saver it waits for a tap instead (player controls).
   (function heroReel() {
     const reel = config.heroVideo || {};
     const box = $("[data-hero-reel]");
     if (!box || !reel.src) return;
     box.classList.add("has-video");
+    // The frame holds the player and moves to the corner; the box keeps its size, so nothing jumps.
     box.innerHTML =
+      `<div class="reel-frame is-paused">` +
       `<video muted loop playsinline preload="none"${reel.poster ? ` poster="${escapeHtml(reel.poster)}"` : ""} aria-label="${escapeHtml(reel.label || "Reel")}">` +
       `<source src="${escapeHtml(reel.src)}" type="video/mp4" /></video>` +
-      `<button class="reel-sound" type="button" aria-pressed="false" aria-label="Turn sound on"><svg><use href="#i-volume-off" /></svg></button>`;
-    const video = $("video", box);
-    const sound = $(".reel-sound", box);
+      `<button class="reel-toggle" type="button" aria-label="Play the reel"><svg><use href="#i-play" /></svg></button>` +
+      `<button class="reel-sound" type="button" aria-pressed="false" aria-label="Turn sound on"><svg><use href="#i-volume-off" /></svg></button>` +
+      `<button class="reel-close" type="button" aria-label="Close the player" hidden><svg><use href="#i-x" /></svg></button>` +
+      `</div>`;
+    const frame = $(".reel-frame", box);
+    const video = $("video", frame);
+    const toggle = $(".reel-toggle", frame);
+    const sound = $(".reel-sound", frame);
+    const close = $(".reel-close", frame);
+
     sound.addEventListener("click", () => {
       video.muted = !video.muted;
       if (!video.muted) video.play().catch(() => {});
@@ -194,10 +207,68 @@
     if (reduceMotion || lowData) {
       video.controls = true;
       sound.hidden = true;
+      toggle.hidden = true;
+      frame.classList.remove("is-paused");
       return;
     }
-    if (document.readyState === "complete") playWhileVisible(video);
-    else window.addEventListener("load", () => playWhileVisible(video), { once: true });
+
+    // The play icon shows while the reel is paused.
+    const showState = () => {
+      frame.classList.toggle("is-paused", video.paused);
+      toggle.setAttribute("aria-label", video.paused ? "Play the reel" : "Pause the reel");
+    };
+    video.addEventListener("play", showState);
+    video.addEventListener("pause", showState);
+
+    const desktop = window.matchMedia("(min-width: 1024px) and (hover: hover) and (pointer: fine)");
+    let started = false; // the page has loaded (or someone tapped play)
+    let userPaused = false; // paused by a tap, so it stays paused
+    let inView = false; // its place in the hero is on screen
+    let mini = false; // in the corner
+    let closed = false; // the small player was closed with ✕
+    let above = false; // its place has scrolled up past the top of the screen
+
+    // Plays while it can be seen (in its place or in the corner) unless someone paused it.
+    function apply() {
+      if (!started) return;
+      const play = !userPaused && (inView || mini);
+      if (play && video.paused) video.play().catch(() => {});
+      if (!play && !video.paused) video.pause();
+    }
+    function setMini(on) {
+      if (mini === on) return;
+      mini = on;
+      frame.classList.toggle("is-mini", on);
+      close.hidden = !on;
+    }
+    function update() {
+      setMini(started && above && desktop.matches && !closed && !userPaused);
+      apply();
+    }
+
+    toggle.addEventListener("click", () => {
+      started = true;
+      userPaused = !video.paused;
+      if (userPaused) video.pause();
+      else video.play().catch(() => {});
+    });
+    close.addEventListener("click", () => {
+      closed = true;
+      update(); // back in its place, which is off screen, so it pauses
+    });
+    new IntersectionObserver(([entry]) => {
+      inView = entry.isIntersecting;
+      above = !inView && entry.boundingClientRect.bottom < 0;
+      update();
+    }).observe(box);
+    desktop.addEventListener("change", update);
+
+    const start = () => {
+      started = true;
+      update();
+    };
+    if (document.readyState === "complete") start();
+    else window.addEventListener("load", start, { once: true });
   })();
 
   // ───────────── More portfolio work (data/portfolio.js) ─────────────
