@@ -36,10 +36,21 @@
     if (days[days.length - 1] < todayIST) return "past";
     return days[0] <= todayIST ? "live" : "upcoming";
   };
-  // Expos still on or still to come, soonest first.
-  const openExpos = allExpos
-    .filter((e) => expoStatus(e) !== "past")
-    .sort((a, b) => (a.days?.[0] || "9999").localeCompare(b.days?.[0] || "9999"));
+  // Expos still on or still to come, soonest first (the hero's "Booking now" line).
+  const byStart = (a, b) => (a.days?.[0] || "9999").localeCompare(b.days?.[0] || "9999");
+  const openExpos = allExpos.filter((e) => expoStatus(e) !== "past").sort(byStart);
+  // The form's expo list: those, then expos that ended in the last 30 days, so a shoot on a day
+  // that has passed can still be booked or recorded afterwards.
+  const KEEP_AFTER_END_DAYS = 30;
+  const keepUntil = (e) => {
+    const end = asDate(e.days[e.days.length - 1]);
+    end.setUTCDate(end.getUTCDate() + KEEP_AFTER_END_DAYS);
+    return end.toISOString().slice(0, 10);
+  };
+  const recentlyEnded = allExpos
+    .filter((e) => expoStatus(e) === "past" && keepUntil(e) >= todayIST)
+    .sort((a, b) => byStart(b, a)); // most recent first
+  const formExpos = [...openExpos, ...recentlyEnded];
 
   // ───────────── Contact links ─────────────
   function waUrl(text) {
@@ -103,7 +114,9 @@
 
   // "Congratulations on your stall at FIRSST 2026 🎉" when an expo is on or coming up.
   // (Without one expo in view it keeps the page's "Congratulations on your stall at the expo 🎉".)
-  if (featured) $("[data-congrats]").textContent = `Congratulations on your stall at ${featured.name} 🎉`; // keeps the 🎉 on the name's line
+  // The congratulations follows the expo in the link even after it has ended (its days can still be booked).
+  const congratsExpo = formExpos.find((e) => e.id === new URLSearchParams(location.search).get("expo")) || featured;
+  if (congratsExpo) $("[data-congrats]").textContent = `Congratulations on your stall at ${congratsExpo.name} 🎉`; // keeps the 🎉 on the name's line
 
   // ───────────── Brand logos (two copies, so the loop never shows a gap) ─────────────
   (function brands() {
@@ -413,20 +426,20 @@
   // Expo list.
   (function fillExpos() {
     const opts = [];
-    if (openExpos.length !== 1) opts.push(`<option value="">Choose the expo</option>`);
-    openExpos.forEach((e) => {
+    // No expo is picked to start with (not even from a ?expo= link); the exhibitor chooses it.
+    opts.push(`<option value="">Choose the expo</option>`);
+    formExpos.forEach((e) => {
       const when = rangeText(e.days);
-      opts.push(`<option value="${e.id}">${escapeHtml(e.name)}${when ? ` · ${when}` : ""}</option>`);
+      const ended = expoStatus(e) === "past" ? " (ended)" : "";
+      opts.push(`<option value="${e.id}">${escapeHtml(e.name)}${when ? ` · ${when}` : ""}${ended}</option>`);
     });
-    if (config.allowOtherExpo || !openExpos.length) opts.push(`<option value="${OTHER}">Another expo (type its name)</option>`);
+    if (config.allowOtherExpo || !formExpos.length) opts.push(`<option value="${OTHER}">Another expo (type its name)</option>`);
     expoSelect.innerHTML = opts.join("");
-    const wanted = params.get("expo");
-    if (wanted && openExpos.some((e) => e.id === wanted)) expoSelect.value = wanted;
-    if (!openExpos.length) expoSelect.value = OTHER;
+    if (!formExpos.length) expoSelect.value = OTHER;
   })();
 
   function currentExpo() {
-    return openExpos.find((e) => e.id === expoSelect.value) || null;
+    return formExpos.find((e) => e.id === expoSelect.value) || null;
   }
 
   // The expo's details and its days as choices; "another expo" gets a name box and a date picker.
@@ -452,14 +465,13 @@
     expoCard.innerHTML = lines.join("");
     expoCard.hidden = false;
 
-    // A chip per day, and one day can be picked (a radio); days already over can't be picked. Today is
-    // picked to start with.
+    // A chip per day, and one day can be picked (a radio). Days that have passed can still be picked,
+    // so a shoot can be booked or recorded afterwards. Today is picked to start with.
     daysWrap.innerHTML = (expo.days || [])
       .map((day) => {
-        const past = day < todayIST;
-        const note = day === todayIST ? "Today" : past ? "Over" : "";
-        return `<label class="chip${past ? " chip--past" : ""}">
-          <input type="radio" name="days" value="${day}"${past ? " disabled" : ""}${day === todayIST ? " checked" : ""} />
+        const note = day === todayIST ? "Today" : "";
+        return `<label class="chip">
+          <input type="radio" name="days" value="${day}"${day === todayIST ? " checked" : ""} />
           <span>${dayLabel(day)}${note ? `<small>${note}</small>` : ""}</span>
         </label>`;
       })
@@ -623,7 +635,7 @@
   const draftFields = ["company", "stall", "name", "role", "phone", "email", "brief", "otherExpo"];
   function saveDraft() {
     try {
-      const draft = { expo: expoSelect.value };
+      const draft = {};
       draftFields.forEach((f) => (draft[f] = form.elements[f].value));
       localStorage.setItem(DRAFT_KEY, JSON.stringify(draft));
     } catch {}
@@ -632,10 +644,6 @@
     try {
       const draft = JSON.parse(localStorage.getItem(DRAFT_KEY) || "null");
       if (!draft) return;
-      if (draft.expo && !params.get("expo") && [...expoSelect.options].some((o) => o.value === draft.expo)) {
-        expoSelect.value = draft.expo;
-        onExpoChange();
-      }
       draftFields.forEach((f) => {
         if (draft[f]) form.elements[f].value = draft[f];
       });

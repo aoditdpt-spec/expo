@@ -25,6 +25,7 @@ No framework and no build step: plain HTML, CSS and JavaScript. `npm run dev` on
 | `assets/img/`, `assets/media/` | The logo, brand logos, service photos and the GATE 2026 footage (copied from the aod.co.in project) |
 | `google-apps-script/Code.gs` | The script that saves bookings to a Google Sheet |
 | `sheetsguide.md` | **How to connect the Google Sheet**, step by step |
+| `domain-guide.md` | **How to put the page on expos.aod.co.in** (Vercel + GoDaddy), step by step |
 | `package.json`, `scripts/serve.mjs` | `npm run dev`: serves the folder at http://localhost:3001 |
 
 ## Before using it with real exhibitors
@@ -55,14 +56,14 @@ Open `data/expos.js`, copy the FIRSST block, and change it:
 
 The page uses it everywhere:
 
-- The **expo list** in the form shows every expo that hasn't ended yet, in date order. Past expos drop out by themselves (Indian time), so they can stay in the file as a record.
+- The **expo list** in the form shows the expos that are on or coming up, in date order, then the ones that ended in the last 30 days, marked "ended". After 30 days an expo drops out by itself (Indian time), so it can stay in the file as a record. The hero's "Booking now" line only names expos that are on or coming up.
 - The **"Booking now for …"** line and the **"Congratulations on your stall at …"** line use the next expo.
-- The **days** in the form are that expo's days, and one can be picked (one booking, one shoot day). Today's date is picked to start with, and days already over can't be picked.
+- The **days** in the form are that expo's days, and one can be picked (one booking, one shoot day). Today's date is picked to start with, and days that have passed can still be picked, so a shoot can be booked or recorded afterwards.
 - In the Google Sheet, the expo gets its own tab with its first booking.
 
 ## Links for the team
 
-- `…/?expo=firsst-2026` opens the page with that expo already picked.
+- `…/?expo=firsst-2026` opens the page with the hero naming that expo ("Congratulations on your stall at FIRSST 2026"). The form never picks an expo by itself; the exhibitor chooses it.
 - `…/?by=Riya` adds "Met by Riya from AOD" under the form, and saves the name with the booking (the Sheet's "Met by" column). Give each team member their own link, or a QR code of it, so you can see who brought in which booking.
 - The two can be combined: `…/?expo=firsst-2026&by=Riya`.
 
@@ -88,7 +89,7 @@ npx -y qrcode@1.5.4 -e H -w 1600 -m 4 -o qr/expo-page-qr.png "https://NEW-ADDRES
 npx -y qrcode@1.5.4 -e H -m 4 -t svg -o qr/expo-page-qr.svg "https://NEW-ADDRESS/"
 ```
 
-Each expo also has its own QR, which opens the page with that expo already picked and the hero naming it: `qr/firsst-2026-qr.png` / `.svg` (`?expo=firsst-2026`) and `qr/iif-2026-qr.png` / `.svg` (`?expo=iif-2026`). For a new expo, run the same commands with `?expo=<its id>`.
+Each expo also has its own QR, which opens the page with the hero naming that expo: `qr/firsst-2026-qr.png` / `.svg` (`?expo=firsst-2026`) and `qr/iif-2026-qr.png` / `.svg` (`?expo=iif-2026`). For a new expo, run the same commands with `?expo=<its id>`.
 
 A team member's own QR (bookings show "Met by" with their name) is the same command with `?by=Name` on the address, e.g. `https://expo-two-ochre.vercel.app/?by=Riya`.
 

@@ -1,10 +1,11 @@
 // Expos AOD is pitching at. To add one, copy a block, change the details and save: the form's
 // "Which expo?" list, the "Now booking" line in the hero and the day picker all come from here.
 //
-// - id:     short and unique, used in links (…/?expo=firsst-2026 opens the form with it picked)
+// - id:     short and unique, used in links (…/?expo=firsst-2026 makes the hero name that expo)
 // - days:   every day of the show, as "YYYY-MM-DD" in order (the form offers each one)
-// - The list only shows expos whose last day hasn't passed yet (Indian time); past ones can stay
-//   here as a record. Leave out any field you don't know.
+// - The form lists expos that are on or coming up, then ones that ended in the last 30 days
+//   (marked "ended"), so a shoot day that has passed can still be picked; after that they drop out
+//   by themselves (Indian time) and can stay here as a record. Leave out any field you don't know.
 window.AOD_EXPOS = [
   {
     id: "firsst-2026",

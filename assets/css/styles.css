@@ -1321,11 +1321,6 @@ textarea:focus {
   outline-offset: 2px;
 }
 
-.chip--past span {
-  opacity: 0.45;
-  cursor: not-allowed;
-}
-
 .expo-card {
   display: grid;
   gap: 0.4rem;
