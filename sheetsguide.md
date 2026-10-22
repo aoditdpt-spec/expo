@@ -4,7 +4,7 @@ Right now the form has nowhere to save bookings, so it opens WhatsApp with the b
 
 - a row on the **All expo bookings** tab
 - a row on a tab named after the expo, such as **FIRSST 2026** (made by itself on the first booking for that expo)
-- the **payment screenshot** saved in a Google Drive folder, with its link in the row
+- the **payment screenshot** and the **company logo** (when one is added) saved in Google Drive, with their links in the row
 - an **email** to the team for each booking
 
 It takes about 10 minutes and needs no coding. Do it while signed in to the Google account that should own the bookings, ideally AOD's own account (communication.aod@gmail.com), not a personal one.
@@ -25,7 +25,7 @@ It takes about 10 minutes and needs no coding. Do it while signed in to the Goog
 4. Open `google-apps-script/Code.gs` from this project folder, copy **all** of it, and paste it into the editor.
 5. Optional: check the settings at the top of the script.
    - `NOTIFY_EMAIL` is who gets an email for each booking. Put `""` for no emails.
-   - `FOLDER_NAME` is the Drive folder for the payment screenshots.
+   - `FOLDER_NAME` and `LOGO_FOLDER_NAME` are the Drive folders for the payment screenshots and the logos.
 6. Press **Ctrl + S** to save.
 
 ## 3. Put it online (deploy it as a web app)
@@ -41,7 +41,7 @@ It takes about 10 minutes and needs no coding. Do it while signed in to the Goog
 4. Click **Deploy**.
 5. Google asks for permission. Click **Authorize access** and pick the account.
    - You'll see **"Google hasn't verified this app"**. That's normal for your own script. Click **Advanced**, then **Go to AOD expo bookings (unsafe)**.
-   - Click **Allow**. The script asks to edit your spreadsheets (to add the rows), use Drive (to save the screenshots) and send email as you (the team notification).
+   - Click **Allow**. The script asks to edit your spreadsheets (to add the rows), use Drive (to save the screenshots and logos) and send email as you (the team notification).
 6. Copy the **Web app URL**. It looks like `https://script.google.com/macros/s/AKfy…/exec`.
 
 **Check it works:** paste that address into a new browser tab. You should see:
@@ -68,13 +68,13 @@ The page now changes by itself:
 
 ## 5. Test it once
 
-1. Open the page and fill in the form with test details: company "TEST", any stall number, your own phone and email, and any screenshot.
+1. Open the page and fill in the form with test details: company "TEST", any logo, any stall number, your own phone and email, and any screenshot.
 2. Press **Book my stall reel**. You should see **Booking received**.
 3. Check that all three things happened:
    - **The Sheet:** a row on **All expo bookings** and on **FIRSST 2026**.
-   - **Google Drive:** the screenshot in the **AOD expo payment screenshots** folder. Its link is in the row's "Payment screenshot" column.
+   - **Google Drive:** the screenshot in **AOD expo payment screenshots** and the logo in **AOD expo company logos**. Their links are in the row's "Payment screenshot" and "Company logo" columns.
    - **Email:** "New expo booking EXP-… · TEST · stall …" in the `NOTIFY_EMAIL` inbox.
-4. Delete the test rows from both tabs and the test image from the Drive folder.
+4. Delete the test rows from both tabs and the test images from both Drive folders.
 
 ---
 
@@ -86,8 +86,10 @@ The page now changes by itself:
 | Reference | The booking's reference (`EXP-YYMMDD-XXXX`), also shown to the exhibitor |
 | Expo | The expo and its dates |
 | Company | Company name |
+| Company logo | A link to the logo in Drive; empty if none was added |
 | Stall | Stall number |
-| Package | What they booked and the price, from `offer` in `config.js` |
+| Package | What they booked, from `offer` in `config.js` |
+| Amount | What they should have paid: the price for each shoot day, such as "₹6,998 (2 days × ₹3,499)". Check it against the payment screenshot. |
 | Contact person / Designation / Phone / Email | Their point of contact |
 | Shoot dates | The day or days they picked (YYYY-MM-DD) |
 | Brief for the artists | What they want shot (optional) |
@@ -101,11 +103,14 @@ The page now changes by itself:
 ## Day-to-day
 
 - **Share the Sheet with the team:** use **Share** at the top right and add each person's email. Give **Editor** to people who update bookings and **Viewer** to people who only look. Never set it to "Anyone with the link": it holds phone numbers, emails and payment screenshots.
-- **Share the screenshots:** the Drive folder **AOD expo payment screenshots** is private to the account that runs the script. Share the folder too if teammates need to open the screenshot links.
+- **Share the screenshots and logos:** the Drive folders **AOD expo payment screenshots** and **AOD expo company logos** are private to the account that runs the script. Share them too if teammates need to open the links.
 - **Adding a new expo:** add it in `data/expos.js` (see `README.md`). Its tab appears in the Sheet with its first booking; nothing to change here.
 - **Marking bookings done:** add your own columns to the **right** of "Page", such as "Payment checked", "Confirmed on WhatsApp" or "Reel delivered". The script only ever adds new rows and never touches existing ones.
 
 ## If you change the script later
+
+(For example, after updating `Code.gs` from this folder when the form gets a new field. If the Sheet already has tabs from before, add the new column's heading by hand in the same place on each tab, so the headings still line up with the rows.)
+
 
 Editing the code isn't enough; the live version only changes when you deploy it again:
 
@@ -129,4 +134,4 @@ The address stays the same, so `config.js` needs no change. Avoid **New deployme
 
 ## Privacy
 
-The Sheet and the Drive folder hold people's phone numbers, emails and payment screenshots. Keep both private to the AOD team. Delete test rows. Don't copy bookings into personal accounts or WhatsApp groups that aren't AOD's.
+The Sheet and the Drive folders hold people's phone numbers, emails and payment screenshots. Keep them private to the AOD team. Delete test rows. Don't copy bookings into personal accounts or WhatsApp groups that aren't AOD's.

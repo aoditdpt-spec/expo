@@ -3,23 +3,26 @@
  *
  * - Every booking gets a row on the "All expo bookings" tab and on a tab named after its expo
  *   (made the first time that expo gets a booking).
- * - The payment screenshot is saved in a Drive folder ("AOD expo payment screenshots") and its
- *   link goes in the row.
+ * - The payment screenshot is saved in a Drive folder ("AOD expo payment screenshots") and the
+ *   company logo, when one is added, in "AOD expo company logos"; their links go in the row.
  * - The team gets an email for each booking (NOTIFY_EMAIL below; leave it empty for no email).
  *
- * Setup is in README.md ("Saving bookings to a Google Sheet").
+ * Setup is in sheetsguide.md.
  */
 
 const NOTIFY_EMAIL = "communication.aod@gmail.com";
 const FOLDER_NAME = "AOD expo payment screenshots";
+const LOGO_FOLDER_NAME = "AOD expo company logos";
 const ALL_TAB = "All expo bookings";
 const HEADERS = [
   "Received at",
   "Reference",
   "Expo",
   "Company",
+  "Company logo",
   "Stall",
   "Package",
+  "Amount",
   "Contact person",
   "Designation",
   "Phone",
@@ -46,16 +49,10 @@ function doPost(e) {
       return json({ ok: false, error: "Some details are missing." });
     }
 
-    // The payment screenshot, into Drive.
-    let proofUrl = "";
-    try {
-      const bytes = Utilities.base64Decode(d.proof.data);
-      const blob = Utilities.newBlob(bytes, "image/jpeg", ref + " " + clean(d.company, 60) + ".jpg");
-      const file = folder().createFile(blob);
-      proofUrl = file.getUrl();
-    } catch (err) {
-      proofUrl = "Couldn't save the screenshot: " + err;
-    }
+    // The payment screenshot and the logo (optional), into Drive.
+    const name = ref + " " + clean(d.company, 60);
+    const proofUrl = saveImage(d.proof, FOLDER_NAME, name, "the screenshot");
+    const logoUrl = d.logo && d.logo.data ? saveImage(d.logo, LOGO_FOLDER_NAME, name + " logo", "the logo") : "";
 
     // A filled spam-trap field doesn't drop the booking (browser autofill has filled one before);
     // the row is marked so someone checks it.
@@ -65,8 +62,10 @@ function doPost(e) {
       ref,
       clean(d.expoName, 120) + (d.expoDates ? " (" + clean(d.expoDates, 60) + ")" : ""),
       clean(d.company, 120),
+      logoUrl,
       clean(d.stall, 40),
       clean(d.package, 120),
+      clean(d.amountText, 80),
       clean(d.name, 80),
       clean(d.role, 80),
       "'+91 " + clean(d.phone, 15),
@@ -118,9 +117,20 @@ function tab(name) {
   return sheet;
 }
 
-function folder() {
-  const found = DriveApp.getFoldersByName(FOLDER_NAME);
-  return found.hasNext() ? found.next() : DriveApp.createFolder(FOLDER_NAME);
+// Saves an image the page sent ({ type, data } with data as base64) and returns its Drive link.
+function saveImage(image, folderName, name, what) {
+  try {
+    const type = image.type === "image/png" ? "image/png" : "image/jpeg";
+    const blob = Utilities.newBlob(Utilities.base64Decode(image.data), type, name + (type === "image/png" ? ".png" : ".jpg"));
+    return folder(folderName).createFile(blob).getUrl();
+  } catch (err) {
+    return "Couldn't save " + what + ": " + err;
+  }
+}
+
+function folder(name) {
+  const found = DriveApp.getFoldersByName(name);
+  return found.hasNext() ? found.next() : DriveApp.createFolder(name);
 }
 
 function json(obj) {

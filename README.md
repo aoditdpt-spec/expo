@@ -2,11 +2,11 @@
 
 A single static page that the AOD team uses at expos to pitch exhibiting brands and book them on the spot. It's kept short on purpose:
 
-- **The pitch:** "Congratulations on your stall 🎉" and the expo reel offer (₹3,500 for 1 reel and a few stall photos, shot on an iPhone 16 Pro Max), with links to sample reels.
+- **The pitch** (no background video; on laptops three columns of the same height: the text, a 9:16 reel in the middle (`heroVideo` in `config.js`: now the GTZ stall reel, `assets/media/gtz-reel.mp4`, with GTZ's watermark cropped out; muted, with a sound button; an empty "VIDEO HERE" box when `src` is empty), and the offer card): "Congratulations on your stall 🎉", the headline "You built a premium stall. Turn it into a reel that gets seen, shared, and remembered." and the expo reel offer (~~₹5,000~~ ₹3,499 for 1 reel and stall photos, shot on high quality camera by a professional reel creator), with links to sample reels.
 - **Brands that trust AOD:** a scrolling strip of logos.
 - **The AOD portfolio:** AOD's own coverage of GATE 2026.
-- **The booking form:** expo, company name, stall number, point of contact (name, designation, number, email), preferred shoot date, a brief for the artists (optional) and the payment screenshot.
-- **A few FAQs** and a last "book now" band.
+- **The booking form** (straight after the logos, before the portfolio): expo, company name, company logo (optional), stall number, point of contact (name, designation, number, email), preferred shoot date, a brief for the artists (optional) and the payment screenshot.
+- **A last "book now" band.**
 
 The page works for every expo, current and upcoming. The expos come from one data file, so adding the next one is a copy-and-paste (see below).
 
@@ -30,9 +30,9 @@ No framework and no build step: plain HTML, CSS and JavaScript. `npm run dev` on
 ## Before using it with real exhibitors
 
 1. **Connect the Google Sheet.** Follow `sheetsguide.md`. Until `submitUrl` is set in `config.js`, the form opens WhatsApp with the booking and tells the exhibitor to attach the payment screenshot there. Nothing is saved.
-2. **Add the payment details.** In `config.js`, under `payment`, fill in `upiId` (and optionally a QR image in `assets/img/` as `qrImage`). Until then the form tells people to ask the AOD team for the QR.
+2. **Payment details.** `payment` in `config.js` has the UPI ID (`thakkardhruvi5701@oksbi`, the account of Dhruvi Thakkar) and the QR (`assets/img/upi-qr.png`, cut from the Google Pay QR). The amount to pay is the offer's price for each shoot day picked (1 day ₹3,499, 2 days ₹6,998, 3 days ₹10,497) and updates as days are ticked. On phones, tapping the QR, the UPI ID or "Pay ₹… in your UPI app" opens the UPI app with that amount filled in; iPhones also get Google Pay, PhonePe and Paytm buttons. On laptops the QR is scanned with a phone and the amount is shown big to type in. Some UPI apps (Google Pay especially) can refuse a payment link to a personal UPI ID; scanning the QR still works, and a business (merchant) UPI ID avoids it. To change the account, change `upiId` and `payeeName` and replace the QR image.
 3. **Check the offer.** `offer` in `config.js` holds the price, what's included and the sample reel links. Make sure both Drive links are shared as "Anyone with the link".
-4. **Confirm the promises.** The page says the reel is "ready to post while the expo is still on", and the FAQ covers short notice, passes, ownership, payment and drones. Change any of these in `index.html` if they aren't how AOD works.
+4. **Confirm the promises.** The page says the reel is "ready to post while the expo is still on", Change it in `index.html` if that isn't how AOD works.
 
 ## Adding an expo
 
@@ -98,6 +98,6 @@ Put real AOD work only. Add photos to `assets/img/portfolio/` and short videos t
 ## How a booking is sent
 
 1. The form checks every field on the phone: a 10-digit Indian mobile, a valid email, at least one shoot date and the screenshot. Typed answers survive a reload.
-2. The screenshot is shrunk on the phone (longest side 1600px, JPEG) so it uploads quickly on expo Wi-Fi.
-3. **With the Sheet connected:** the booking and the screenshot go to the Google Apps Script. The page says "Booking received" only after the script has saved it.
-4. **Without it, or if saving fails:** WhatsApp opens to AOD's number with the whole booking typed out, and the person attaches the screenshot in the chat.
+2. The payment screenshot (longest side 1600px, JPEG) and the logo (1000px, PNG, so a transparent background stays transparent) are shrunk on the phone so they upload quickly on expo Wi-Fi.
+3. **With the Sheet connected:** the booking, the screenshot and the logo go to the Google Apps Script. The page says "Booking received" only after the script has saved it.
+4. **Without it, or if saving fails:** WhatsApp opens to AOD's number with the whole booking typed out, and the person attaches the screenshot (and the logo) in the chat.

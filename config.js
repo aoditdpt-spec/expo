@@ -13,15 +13,24 @@ window.AOD_EXPO_CONFIG = {
   instagramUrl: "https://www.instagram.com/artistsondemand.in/",
   siteUrl: "https://www.aod.co.in",
 
+  // The reel in the middle of the hero (an MP4 in assets/media/, 9:16). It plays muted while on
+  // screen, with a button for sound. With `src` empty, the box says "VIDEO HERE" instead.
+  heroVideo: {
+    src: "assets/media/gtz-reel.mp4",
+    poster: "assets/media/gtz-reel.jpg",
+    label: "Reel AOD made for GTZ's stall at Aluminium Bharat",
+  },
+
   // The offer in the hero (price, what's included, sample reels) and in the Payment step.
   offer: {
-    name: "1 reel and a few stall photos",
-    price: 3500, // in rupees
-    priceNote: "per stall",
+    name: "1 reel and stall photos",
+    price: 3499, // in rupees
+    wasPrice: 5000, // shown struck through before the price; remove the line to hide it
+    priceNote: "per day", // the price is for each shoot day: 2 days = 2 × price
     includes: [
-      "A professional reel of your stall",
-      "A few stall photos",
-      "Shot on an iPhone 16 Pro Max by a professional reel creator",
+      "Professional reel of your stall",
+      "Stall photos",
+      "Shot on high quality camera by a professional reel creator",
       "Ready to post while the expo is still on",
     ],
     // Sample reels (Google Drive links shared with "Anyone with the link").
@@ -31,15 +40,16 @@ window.AOD_EXPO_CONFIG = {
     ],
   },
 
-  // Payment, shown in the form's Payment step. Fill in AOD's UPI ID (e.g. "aod@okicici") and,
-  // optionally, a QR image saved in assets/img/ (e.g. "assets/img/upi-qr.png"). While both are
-  // empty the form asks people to get the payment details from the AOD team at the expo.
+  // Payment, shown in the form's Payment step: the UPI ID (with a Copy button and, on phones, a
+  // "Pay with a UPI app" button) and the QR image in assets/img/. payeeName is the name on the UPI
+  // account. With both upiId and qrImage empty, the form asks people to get the payment details
+  // from the AOD team at the expo.
   payment: {
-    upiId: "",
-    payeeName: "Artists on Demand",
-    qrImage: "",
-    // {price} becomes the offer's price, e.g. "₹3,500".
-    note: "Pay {price} for the expo reel (or the amount the AOD team shared with you for more), then add the screenshot below.",
+    upiId: "thakkardhruvi5701@oksbi",
+    payeeName: "Dhruvi Thakkar",
+    qrImage: "assets/img/upi-qr.png",
+    // Shown under the payment details. ({price} becomes the offer's price, e.g. "₹3,499".)
+    note: "After paying, add the payment screenshot below.",
   },
 
   // Show "Another expo (type its name)" at the end of the expo list. Off for now: only the expos

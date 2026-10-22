@@ -45,7 +45,6 @@
   function waUrl(text) {
     return `https://wa.me/${config.whatsappNumber}${text ? `?text=${encodeURIComponent(text)}` : ""}`;
   }
-  $$("[data-wa]").forEach((a) => (a.href = waUrl(a.dataset.waText || "Hi AOD, I'd like to book a reel for my expo stall.")));
   $$("[data-phone]").forEach((a) => (a.href = config.phoneHref));
   $$("[data-phone-text]").forEach((el) => (el.textContent = config.phoneDisplay));
   $$("[data-email]").forEach((a) => (a.href = `mailto:${config.email}`));
@@ -73,6 +72,12 @@
     if (!card) return;
     if (!offer.name) return (card.hidden = true);
     $("[data-offer-price]").textContent = priceText;
+    if (offer.wasPrice > offer.price) {
+      const was = $("[data-offer-was]");
+      was.textContent = `₹${Number(offer.wasPrice).toLocaleString("en-IN")}`;
+      was.setAttribute("aria-label", `Was ${was.textContent}, now`);
+      was.hidden = false;
+    }
     $("[data-offer-unit]").textContent = offer.priceNote ? ` ${offer.priceNote}` : "";
     $("[data-offer-name]").textContent = offer.name;
     $("[data-offer-includes]").innerHTML = (offer.includes || [])
@@ -84,7 +89,7 @@
   })();
 
   // "Congratulations on your stall at FIRSST 2026 🎉" when an expo is on or coming up.
-  if (openExpos[0]) $("[data-congrats]").textContent = `Congratulations on your stall at ${openExpos[0].name} 🎉`;
+  if (openExpos[0]) $("[data-congrats]").textContent = `Congratulations on your stall at ${openExpos[0].name} 🎉`; // keeps the 🎉 on the name's line
 
   // ───────────── Brand logos (two copies, so the loop never shows a gap) ─────────────
   (function brands() {
@@ -133,7 +138,7 @@
         // Wide wordmarks shorter, square badges taller, so each logo carries about the same weight.
         img.addEventListener("load", () => {
           const ratio = img.naturalWidth / img.naturalHeight || 2;
-          img.style.height = `${Math.round(Math.max(28, Math.min(64, 64 / Math.sqrt(ratio))))}px`;
+          img.style.height = `${Math.round(Math.max(44, Math.min(96, 96 / Math.sqrt(ratio))))}px`;
         });
         track.appendChild(img);
       });
@@ -155,32 +160,6 @@
     }, { threshold: 0.15 }).observe(video);
   }
 
-  // The hero footage: the still poster shows first; the video joins once the page has loaded.
-  window.addEventListener("load", () => {
-    if (reduceMotion || lowData) return;
-    const media = $(".hero__media");
-    const portrait = window.matchMedia("(max-aspect-ratio: 2/3)").matches;
-    const video = document.createElement("video");
-    video.muted = true;
-    video.loop = true;
-    video.playsInline = true;
-    video.setAttribute("playsinline", "");
-    video.setAttribute("aria-hidden", "true");
-    const base = portrait ? "assets/media/hero-portrait" : "assets/media/hero-1080";
-    [
-      [`${base}-av1.mp4`, portrait ? 'video/mp4; codecs="av01.0.04M.08"' : 'video/mp4; codecs="av01.0.08M.08"'],
-      [`${base}.mp4`, 'video/mp4; codecs="avc1.640028"'],
-    ].forEach(([src, type]) => {
-      const s = document.createElement("source");
-      s.src = src;
-      s.type = type;
-      video.appendChild(s);
-    });
-    video.addEventListener("playing", () => video.classList.add("is-playing"), { once: true });
-    media.appendChild(video);
-    playWhileVisible(video);
-  });
-
   // The portfolio film: plays (muted) while on screen; with reduced motion it gets controls instead.
   $$("video[data-autoplay]").forEach((video) => {
     if (reduceMotion || lowData) {
@@ -190,6 +169,36 @@
     }
     playWhileVisible(video);
   });
+
+  // The reel in the hero's middle column (heroVideo in config.js): plays muted while on screen, with a
+  // round button for sound. It starts only once the rest of the page has loaded, so the reel never
+  // slows the first view; with reduced motion or Data Saver it waits for a tap (player controls).
+  (function heroReel() {
+    const reel = config.heroVideo || {};
+    const box = $("[data-hero-reel]");
+    if (!box || !reel.src) return;
+    box.classList.add("has-video");
+    box.innerHTML =
+      `<video muted loop playsinline preload="none"${reel.poster ? ` poster="${escapeHtml(reel.poster)}"` : ""} aria-label="${escapeHtml(reel.label || "Reel")}">` +
+      `<source src="${escapeHtml(reel.src)}" type="video/mp4" /></video>` +
+      `<button class="reel-sound" type="button" aria-pressed="false" aria-label="Turn sound on"><svg><use href="#i-volume-off" /></svg></button>`;
+    const video = $("video", box);
+    const sound = $(".reel-sound", box);
+    sound.addEventListener("click", () => {
+      video.muted = !video.muted;
+      if (!video.muted) video.play().catch(() => {});
+      sound.setAttribute("aria-pressed", String(!video.muted));
+      sound.setAttribute("aria-label", video.muted ? "Turn sound on" : "Turn sound off");
+      sound.innerHTML = `<svg><use href="#i-${video.muted ? "volume-off" : "volume"}" /></svg>`;
+    });
+    if (reduceMotion || lowData) {
+      video.controls = true;
+      sound.hidden = true;
+      return;
+    }
+    if (document.readyState === "complete") playWhileVisible(video);
+    else window.addEventListener("load", () => playWhileVisible(video), { once: true });
+  })();
 
   // ───────────── More portfolio work (data/portfolio.js) ─────────────
   (function morePortfolio() {
@@ -277,15 +286,35 @@
   const daysWrap = $("[data-days]");
   const dateWrap = $("[data-date-input]");
   const dateInput = $("#shootDate");
-  const proofInput = $("#proof");
-  const upload = $("[data-upload]");
   const submitBtn = $("[data-submit]");
   const submitLabel = $("[data-submit-label]");
   const formError = $("[data-form-error]");
   const params = new URLSearchParams(location.search);
   const metBy = (params.get("by") || "").trim().slice(0, 60);
   const saving = Boolean(config.submitUrl);
-  let proof = null; // { name, type, data } with data as base64 (no "data:" prefix)
+  // The two uploads, shrunk in the browser so they send fast on expo Wi-Fi: the payment screenshot
+  // to 1600px JPEG, the logo to 1000px PNG (keeping a transparent background). Each is kept as
+  // { name, type, data, original } with data as base64 (no "data:" prefix).
+  const files = { proof: null, logo: null };
+  const uploadSettings = {
+    proof: { max: 1600, type: "image/jpeg", unreadable: "Couldn't read that image. Please try another screenshot." },
+    logo: { max: 1000, type: "image/png", unreadable: "Couldn't read that image. Please try a PNG or JPG of your logo." },
+  };
+  const uploadBox = (name) => $(`[data-upload="${name}"]`);
+
+  // Payment: the amount is the offer's price for each shoot day picked (2 days = 2 × ₹3,499).
+  // On phones the QR, the UPI ID and the Pay button open the person's UPI app with that amount
+  // filled in (a upi:// link); iPhones also get buttons for Google Pay, PhonePe and Paytm, since iOS
+  // has no reliable "choose a UPI app" for upi:// links. Laptops show the QR to scan with a phone.
+  const pay = config.payment || {};
+  const appleDevice = /iPhone|iPad|iPod/i.test(navigator.userAgent) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+  const phone = appleDevice || /Android/i.test(navigator.userAgent);
+  const upiApps = [
+    { label: "Google Pay", base: "gpay://upi/pay?" },
+    { label: "PhonePe", base: "phonepe://pay?" },
+    { label: "Paytm", base: "paytmmp://pay?" },
+  ];
+  const rupees = (n) => `₹${Number(n).toLocaleString("en-IN")}`;
   let lastMessage = "";
 
   if (metBy) {
@@ -351,6 +380,7 @@
         </label>`;
       })
       .join("");
+    updatePayment();
   }
   expoSelect.addEventListener("change", () => {
     onExpoChange();
@@ -358,26 +388,47 @@
   });
   onExpoChange();
 
+  // The days picked in the form (the chips, or the date box for "another expo").
+  function selectedDays() {
+    if (expoSelect.value === OTHER) return dateInput.value ? [dateInput.value] : [];
+    return $$('input[name="days"]:checked', daysWrap).map((i) => i.value);
+  }
+  function amountFor(days) {
+    return (Number(offer.price) || 0) * Math.max(1, days.length);
+  }
+
   // Payment details from config.js.
   (function fillPayment() {
-    const pay = config.payment || {};
     const box = $("[data-pay]");
-    const note = (pay.note || "").replace("{price}", priceText || "the amount agreed");
-    const parts = [`<p class="pay__note">${escapeHtml(note)}</p>`];
-    if (pay.upiId || pay.qrImage) {
-      parts.push(`<div class="pay__box">`);
-      if (pay.qrImage) parts.push(`<img class="pay__qr" src="${escapeHtml(pay.qrImage)}" alt="UPI QR code for ${escapeHtml(pay.payeeName || "AOD")}" />`);
-      if (pay.upiId) {
-        const upiLink = `upi://pay?pa=${encodeURIComponent(pay.upiId)}&pn=${encodeURIComponent(pay.payeeName || "AOD")}&cu=INR&tn=${encodeURIComponent("AOD expo stall reel")}`;
-        parts.push(`<div class="pay__upi"><code>${escapeHtml(pay.upiId)}</code><button class="pay__copy" type="button" data-copy="${escapeHtml(pay.upiId)}">Copy UPI ID</button></div>`);
-        // Phones only: opens the UPI apps (the amount is typed there).
-        if (/Android|iPhone|iPad/i.test(navigator.userAgent)) parts.push(`<a class="btn btn--outline pay__app" href="${upiLink}">Pay with a UPI app</a>`);
-      }
-      parts.push(`</div>`);
-    } else {
-      parts.push(`<p class="pay__note" style="margin-top:.5rem"><strong>Ask the AOD team at the expo for the payment QR</strong>, or <a href="${waUrl("Hi AOD, please send the payment details for my expo stall crew.")}" target="_blank" rel="noopener">get it on WhatsApp</a>.</p>`);
+    if (!pay.upiId && !pay.qrImage) {
+      box.innerHTML = `<p class="pay__note"><strong>Ask the AOD team at the expo for the payment QR</strong>, or <a href="${waUrl("Hi AOD, please send the payment details for my expo stall reel.")}" target="_blank" rel="noopener">get it on WhatsApp</a>.</p>`;
+      return;
     }
+    const tap = phone && pay.upiId; // on phones, the QR and the UPI ID open the UPI app
+    const name = pay.payeeName ? ` Your app will show <strong>${escapeHtml(pay.payeeName)}</strong>.` : "";
+    const parts = [
+      `<div class="pay__amount" aria-live="polite"><span>Amount to pay</span><strong data-pay-amount></strong><small data-pay-breakdown></small></div>`,
+      `<div class="pay__box">`,
+    ];
+    if (pay.qrImage) {
+      const img = `<img src="${escapeHtml(pay.qrImage)}" alt="UPI QR code${pay.upiId ? ` for ${escapeHtml(pay.upiId)}` : ""}" width="832" height="935" />`;
+      parts.push(
+        `<figure class="pay__qr">${tap ? `<a data-upi-link aria-label="Pay in your UPI app">${img}</a>` : img}` +
+          `<figcaption>${tap ? "Tap the QR to pay in your UPI app, or scan it from another phone." : "Scan with any UPI app on your phone."}${name}</figcaption></figure>`,
+      );
+    }
+    if (pay.upiId) {
+      const id = `<code>${escapeHtml(pay.upiId)}</code>`;
+      parts.push(`<div class="pay__upi">${tap ? `<a class="pay__id" data-upi-link>${id}</a>` : id}<button class="pay__copy" type="button" data-copy="${escapeHtml(pay.upiId)}">Copy UPI ID</button></div>`);
+    }
+    if (tap) parts.push(`<a class="btn btn--primary btn--lg pay__app" data-upi-link><span data-pay-cta></span></a>`);
+    if (tap && appleDevice)
+      parts.push(`<p class="pay__or">Or open your app:</p><div class="pay__apps">${upiApps.map((a) => `<a class="pay__appbtn" data-upi-app="${a.base}">${a.label}</a>`).join("")}</div>`);
+    parts.push(`</div>`);
+    const note = (pay.note || "").replace("{price}", priceText || "the amount agreed");
+    if (note) parts.push(`<p class="pay__note pay__note--after">${escapeHtml(note)}</p>`);
     box.innerHTML = parts.join("");
+
     const copy = $("[data-copy]", box);
     if (copy)
       copy.addEventListener("click", async () => {
@@ -389,46 +440,85 @@
         }
         setTimeout(() => (copy.textContent = "Copy UPI ID"), 2000);
       });
+    updatePayment();
   })();
 
-  // Payment screenshot: shrunk in the browser (longest side 1600px, JPEG) so it sends fast on expo Wi-Fi.
-  proofInput.addEventListener("change", async () => {
-    const file = proofInput.files && proofInput.files[0];
-    clearError("proof");
-    if (!file) return;
-    if (!file.type.startsWith("image/")) {
-      proof = null;
-      return showError("proof", "Please add an image (a screenshot or a photo).");
-    }
-    try {
-      proof = await shrink(file);
-    } catch {
-      proof = null;
-      return showError("proof", "Couldn't read that image. Please try another screenshot.");
-    }
-    $("[data-upload-preview]").src = `data:${proof.type};base64,${proof.data}`;
-    $("[data-upload-name]").textContent = file.name;
-    $("[data-upload-empty]").hidden = true;
-    $("[data-upload-filled]").hidden = false;
+  // The amount for the days picked, and UPI links that carry it (and the company, as the note).
+  function updatePayment() {
+    const amountEl = $("[data-pay-amount]");
+    if (!amountEl) return;
+    const days = selectedDays();
+    const n = Math.max(1, days.length);
+    const amount = amountFor(days);
+    amountEl.textContent = rupees(amount);
+    $("[data-pay-breakdown]").textContent = days.length
+      ? `${n} day${n > 1 ? "s" : ""} × ${priceText}`
+      : `${priceText} a day · pick your shoot days above`;
+    if (!pay.upiId) return;
+    const company = form.elements.company.value.trim();
+    const note = `AOD expo reel${company ? ` ${company}` : ""}`.slice(0, 40);
+    // pa stays as typed (UPI IDs are letters, digits, . - _ and @); the rest is encoded.
+    const query = `pa=${pay.upiId}&pn=${encodeURIComponent(pay.payeeName || "AOD")}&am=${amount.toFixed(2)}&cu=INR&tn=${encodeURIComponent(note)}`;
+    $$("[data-upi-link]").forEach((a) => (a.href = `upi://pay?${query}`));
+    $$("[data-upi-app]").forEach((a) => (a.href = a.dataset.upiApp + query));
+    const cta = $("[data-pay-cta]");
+    if (cta) cta.textContent = `Pay ${rupees(amount)} in your UPI app`;
+  }
+
+
+  function showUpload(name, file) {
+    const box = uploadBox(name);
+    const has = Boolean(file);
+    $("[data-upload-empty]", box).hidden = has;
+    $("[data-upload-filled]", box).hidden = !has;
+    $("[data-upload-preview]", box).src = has ? `data:${file.type};base64,${file.data}` : "";
+    $("[data-upload-name]", box).textContent = has ? file.original : "";
+  }
+
+  Object.keys(uploadSettings).forEach((name) => {
+    const input = $("input[type=file]", uploadBox(name));
+    input.addEventListener("change", async () => {
+      const file = input.files && input.files[0];
+      clearError(name);
+      if (!file) return;
+      if (!file.type.startsWith("image/")) {
+        files[name] = null;
+        showUpload(name, null);
+        return showError(name, "Please add an image (a screenshot, a photo or a PNG).");
+      }
+      try {
+        files[name] = { ...(await shrink(file, uploadSettings[name])), original: file.name };
+      } catch {
+        files[name] = null;
+        showUpload(name, null);
+        return showError(name, uploadSettings[name].unreadable);
+      }
+      showUpload(name, files[name]);
+    });
   });
 
-  function shrink(file) {
+  function shrink(file, { max, type }) {
     return new Promise((resolve, reject) => {
       const url = URL.createObjectURL(file);
       const img = new Image();
       img.onload = () => {
-        const max = 1600;
-        const scale = Math.min(1, max / Math.max(img.width, img.height));
+        // SVG logos can report no size; draw those at the largest size allowed.
+        const w = img.naturalWidth || max;
+        const h = img.naturalHeight || max;
+        const scale = Math.min(1, max / Math.max(w, h));
         const canvas = document.createElement("canvas");
-        canvas.width = Math.round(img.width * scale);
-        canvas.height = Math.round(img.height * scale);
+        canvas.width = Math.round(w * scale);
+        canvas.height = Math.round(h * scale);
         const ctx = canvas.getContext("2d");
-        ctx.fillStyle = "#fff";
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        if (type === "image/jpeg") {
+          ctx.fillStyle = "#fff"; // JPEG has no transparency
+          ctx.fillRect(0, 0, canvas.width, canvas.height);
+        }
         ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
         URL.revokeObjectURL(url);
-        const data = canvas.toDataURL("image/jpeg", 0.82).split(",")[1];
-        resolve({ name: file.name.replace(/\.[^.]+$/, "") + ".jpg", type: "image/jpeg", data });
+        const data = canvas.toDataURL(type, 0.82).split(",")[1];
+        const ext = type === "image/png" ? ".png" : ".jpg";
+        resolve({ name: file.name.replace(/\.[^.]+$/, "") + ext, type, data });
       };
       img.onerror = () => {
         URL.revokeObjectURL(url);
@@ -438,7 +528,7 @@
     });
   }
 
-  // ── Draft: typed answers survive a reload or a dropped connection (not the screenshot). ──
+  // ── Draft: typed answers survive a reload or a dropped connection (not the uploads). ──
   const draftFields = ["company", "stall", "name", "role", "phone", "email", "brief", "otherExpo"];
   function saveDraft() {
     try {
@@ -463,6 +553,7 @@
   form.addEventListener("input", (e) => {
     if (e.target.name) clearError(e.target.name === "days" ? "days" : e.target.name);
     saveDraft();
+    updatePayment();
   });
 
   // ── Checks ──
@@ -475,7 +566,7 @@
   function showError(name, message) {
     const el = $(`[data-error-for="${name}"]`);
     if (el) el.textContent = message;
-    const input = name === "proof" ? upload : form.elements[name];
+    const input = uploadSettings[name] ? uploadBox(name) : form.elements[name];
     if (input && input.classList) input.classList.add("is-invalid");
     if (input && input.setAttribute) input.setAttribute("aria-invalid", "true");
     return false;
@@ -483,7 +574,7 @@
   function clearError(name) {
     const el = $(`[data-error-for="${name}"]`);
     if (el) el.textContent = "";
-    const input = name === "proof" ? upload : form.elements[name];
+    const input = uploadSettings[name] ? uploadBox(name) : form.elements[name];
     if (input && input.classList) input.classList.remove("is-invalid");
     if (input && input.removeAttribute) input.removeAttribute("aria-invalid");
   }
@@ -491,7 +582,8 @@
   function collect() {
     const expo = currentExpo();
     const other = expoSelect.value === OTHER;
-    const days = other ? (dateInput.value ? [dateInput.value] : []) : $$('input[name="days"]:checked', daysWrap).map((i) => i.value);
+    const days = selectedDays();
+    const n = Math.max(1, days.length);
     const v = (n) => form.elements[n].value.trim();
     return {
       expoId: other ? "" : expo ? expo.id : "",
@@ -506,7 +598,9 @@
       email: v("email"),
       days,
       brief: v("brief"),
-      package: offer.name ? `${offer.name}${priceText ? ` (${priceText})` : ""}` : "",
+      package: offer.name || "",
+      amount: amountFor(days),
+      amountText: offer.price ? `${rupees(amountFor(days))} (${n} day${n > 1 ? "s" : ""} × ${priceText})` : "",
       consent: form.elements.consent.checked,
       trap: form.elements.aod_trap.value,
       metBy,
@@ -529,7 +623,7 @@
     if (!d.email) ok = showError("email", "Please add an email address.");
     else if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(d.email)) ok = showError("email", "That email doesn't look right.");
     if (!d.days.length) ok = showError("days", "Please pick at least one day to shoot.");
-    if (!proof) ok = showError("proof", "Please add the screenshot of your payment.");
+    if (!files.proof) ok = showError("proof", "Please add the screenshot of your payment.");
     if (!d.consent) ok = showError("consent", "Please tick this so we can contact you about the booking.");
     return ok;
   }
@@ -549,12 +643,14 @@
       `Company: ${d.company}`,
       `Stall: ${d.stall}`,
       ...(d.package ? [`Package: ${d.package}`] : []),
+      ...(d.amountText ? [`Amount: ${d.amountText}`] : []),
       `Contact: ${d.name}, ${d.role}`,
       `Phone: +91 ${d.phone}`,
       `Email: ${d.email}`,
       `Shoot date${d.days.length > 1 ? "s" : ""}: ${d.days.map(dayLabel).join(", ")}`,
     ];
     if (d.brief) lines.push(`Brief for the artists: ${d.brief}`);
+    if (files.logo) lines.push(savedProof ? "Company logo: added on the booking page" : "Company logo: attaching it in this chat");
     lines.push(savedProof ? "Payment screenshot: added on the booking page" : "Payment screenshot: attaching it in this chat");
     if (d.metBy) lines.push(`Met by: ${d.metBy}`);
     return lines.join("\n");
@@ -572,8 +668,10 @@
     const refEl = $("[data-done-ref]");
     refEl.hidden = !ref;
     refEl.textContent = ref ? `Booking reference: ${ref}` : "";
-    $("[data-done-wa]").href = waUrl(lastMessage);
-    $("[data-done-wa-label]").textContent = waLabel;
+    const wa = $("[data-done-wa]");
+    wa.hidden = !waLabel;
+    wa.href = waUrl(lastMessage);
+    $("[data-done-wa-label]").textContent = waLabel || "";
     done.hidden = false;
     done.focus();
     done.scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth", block: "center" });
@@ -584,7 +682,7 @@
     formError.hidden = true;
     $$(".field__error", form).forEach((el) => (el.textContent = ""));
     $$(".is-invalid", form).forEach((el) => el.classList.remove("is-invalid"));
-    upload.classList.remove("is-invalid");
+    $$(".upload", form).forEach((el) => el.classList.remove("is-invalid"));
     const d = collect();
     if (!validate(d)) {
       const first = $(".is-invalid, [aria-invalid='true']", form);
@@ -599,14 +697,15 @@
       window.open(waUrl(lastMessage), "_blank", "noopener");
       return showDone({
         title: "Finish on WhatsApp",
-        text: "WhatsApp opened with your booking. Attach your payment screenshot and press send; AOD confirms your booking there. Nothing has been saved on this page yet.",
+        text: `WhatsApp opened with your booking. Attach your payment screenshot${files.logo ? " and your logo" : ""} and press send; AOD confirms your booking there. Nothing has been saved on this page yet.`,
         ref,
         waLabel: "Open WhatsApp again",
       });
     }
 
     setBusy(true);
-    const payload = { ...d, ref, createdAt: new Date().toISOString(), page: location.href, proof };
+    const strip = (f) => (f ? { name: f.name, type: f.type, data: f.data } : null);
+    const payload = { ...d, ref, createdAt: new Date().toISOString(), page: location.href, proof: strip(files.proof), logo: strip(files.logo) };
     try {
       const res = await fetch(config.submitUrl, {
         method: "POST",
@@ -624,7 +723,7 @@
         title: "Booking received",
         text: `Thanks, ${d.name.split(" ")[0]}. We'll check the payment and confirm your booking on WhatsApp at +91 ${d.phone}.`,
         ref: out.ref || ref,
-        waLabel: "Also message us on WhatsApp",
+        waLabel: "",
       });
     } catch {
       lastMessage = message(d, ref, false);
@@ -641,9 +740,10 @@
     form.reset();
     expoSelect.value = keepExpo;
     onExpoChange();
-    proof = null;
-    $("[data-upload-empty]").hidden = false;
-    $("[data-upload-filled]").hidden = true;
+    Object.keys(files).forEach((name) => {
+      files[name] = null;
+      showUpload(name, null);
+    });
     try {
       localStorage.removeItem(DRAFT_KEY);
     } catch {}
