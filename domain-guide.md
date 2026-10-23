@@ -63,7 +63,7 @@ Open **https://expos.aod.co.in** on a phone and a laptop:
 
 ## 5. After it works
 
-- **New QR codes.** The QR codes in `qr/` point to expo-two-ochre.vercel.app. Make new ones for expos.aod.co.in before printing (the commands are in `README.md`, under "The live page and its QR code"), or ask for them. The old ones keep working as long as the vercel.app address does.
+- **New QR codes: done** (23 Oct 2026). The QR codes in `qr/` point straight at expos.aod.co.in. Old printed ones (expo-two-ochre.vercel.app) keep working as long as that address does.
 - **Old link and old QR codes:** send them to the new address (step 6).
 - **Optional:** link the page from aod.co.in, for example in the footer or the More menu.
 

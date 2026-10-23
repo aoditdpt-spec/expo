@@ -82,7 +82,7 @@ Then open http://localhost:3001. Nothing to install: `scripts/serve.mjs` is a ti
 
 ## The live page and its QR code
 
-The page is live at **https://expo-two-ochre.vercel.app/** (Vercel, from this repo). `qr/expo-page-qr.png` (1600×1600, for printing) and `qr/expo-page-qr.svg` (sharp at any size, for standees and banners) are QR codes of that address, with high error correction so they still scan when printed small or partly covered. If the address changes (for example to expo.aod.co.in), make new ones:
+The page is live at **https://expos.aod.co.in/** (Vercel, from this repo; the first address, https://expo-two-ochre.vercel.app/, still opens it). `qr/expo-page-qr.png` (1600×1600, for printing) and `qr/expo-page-qr.svg` (sharp at any size, for standees and banners) are QR codes of that address (the per-expo ones, `qr/firsst-2026-qr.*` and `qr/iif-2026-qr.*`, add `?expo=<id>`), with high error correction so they still scan when printed small or partly covered. If the address changes again, make new ones:
 
 ```bash
 npx -y qrcode@1.5.4 -e H -w 1600 -m 4 -o qr/expo-page-qr.png "https://NEW-ADDRESS/"
