@@ -549,12 +549,11 @@
     const amountEl = $("[data-pay-amount]");
     if (!amountEl) return;
     const days = selectedDays();
-    const n = Math.max(1, days.length);
     const amount = amountFor(days);
     amountEl.textContent = rupees(amount);
     $("[data-pay-breakdown]").textContent = days.length
-      ? `${n} day${n > 1 ? "s" : ""} × ${priceText}`
-      : `${priceText} a day · pick your shoot day above`;
+      ? `1 reel · shoot on ${dayLabel(days[0])}`
+      : `${priceText} per reel · pick your shoot day above`;
     if (!pay.upiId) return;
     const company = form.elements.company.value.trim();
     const note = `AOD expo reel${company ? ` ${company}` : ""}`.slice(0, 40);
@@ -682,7 +681,6 @@
     const expo = currentExpo();
     const other = expoSelect.value === OTHER;
     const days = selectedDays();
-    const n = Math.max(1, days.length);
     const v = (n) => form.elements[n].value.trim();
     return {
       expoId: other ? "" : expo ? expo.id : "",
@@ -699,7 +697,7 @@
       brief: v("brief"),
       package: offer.name || "",
       amount: amountFor(days),
-      amountText: offer.price ? `${rupees(amountFor(days))} (${n} day${n > 1 ? "s" : ""} × ${priceText})` : "",
+      amountText: offer.price ? `${rupees(amountFor(days))} (1 reel)` : "",
       consent: form.elements.consent.checked,
       trap: form.elements.aod_trap.value,
       metBy,

@@ -26,7 +26,7 @@ window.AOD_EXPO_CONFIG = {
     name: "1 reel and stall photos",
     price: 3499, // in rupees
     wasPrice: 5000, // shown struck through before the price; remove the line to hide it
-    priceNote: "per day", // for one shoot day (each booking picks one date)
+    priceNote: "per reel", // each booking is one reel, shot on the date picked
     includes: [
       "Professional reel of your stall",
       "Stall photos",
