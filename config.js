@@ -44,7 +44,7 @@ window.AOD_EXPO_CONFIG = {
   // account. With both upiId and qrImage empty, the form asks people to get the payment details
   // from the AOD team at the expo.
   payment: {
-    upiId: "thakkardhruvi5701@oksbi",
+    upiId: "thakkardhruvi5701@okhdfcbank",
     payeeName: "Dhruvi Thakkar",
     qrImage: "assets/img/upi-qr.png",
     // Shown under the payment details. ({price} becomes the offer's price, e.g. "₹3,499".)
